@@ -11,7 +11,8 @@ import socket
 from _thread import start_new_thread
 import random
 from threading import Lock
-from typing import ByteString
+from typing import ByteString, cast
+import colorama as color
 
 
 class CommandParserAndBuilder:
@@ -45,6 +46,7 @@ class CommandParserAndBuilder:
 
         self.parser_mux_send = {
             b'MESG': self.mesg_send,
+            b'EXIT': self.exit_client,
         }
 
     @staticmethod
@@ -61,7 +63,8 @@ class CommandParserAndBuilder:
         message = 'message'
         screen_name = 'screen_name'
         # now go into the builder and build the actual format string
-        message_builder = f"{kwargs[screen_name]}: {kwargs[message]}"
+        message_builder = f"{color.Fore.YELLOW}{kwargs[screen_name].decode()}{color.Fore.RESET}: " \
+                          + f"{color.Back.CYAN}{color.Fore.WHITE}{kwargs[message].decode()}{color.Fore.RESET}{color.Back.RESET}"
         return message_builder
 
     @staticmethod
@@ -79,7 +82,7 @@ class CommandParserAndBuilder:
     def rejct_handle_recv(**kwargs) -> str:
         """ recieves the REJCT command meaning the screen_name already exists"""
         screen_name = 'screen_name'
-        return f'{kwargs[screen_name]} is already in use please choose another one'
+        return f'{color.Fore.RED}{kwargs[screen_name]} is already in use please choose another one{color.Fore.RESET}'
 
     @staticmethod
     def exit_send(**kwargs) -> ByteString:
@@ -92,6 +95,10 @@ class CommandParserAndBuilder:
         result = F"MESG {kwargs[screen_name]}: {kwargs[message]}\n".encode()
         print(f"THIS IS WHAT WE ARE SENDING: {result}")
         return result
+
+    @staticmethod
+    def exit_client(**kwargs) -> bytes:
+        return f'EXIT {kwargs["screen_name"]}\n'.encode()
 
 
 class WrappedSocketClient:
@@ -133,11 +140,12 @@ class WrappedSocketClient:
         # initialization
 
         # Establishment of UDP and TCP
-        self.udp_port = random.randint(self.port, 2 ** 16 - 1)
+        self.udp_port = random.randint(self.port + 1, 2 ** 16 - 1)
         self.socket_UDP.bind((self.hostname, self.udp_port))
         connection_str = self.commands_send[b'HELO'] + self.nick.encode() + b' ' + self.hostname.encode() \
-                         + b' ' + (str(self.udp_port)).encode() + self.end_of_command
-
+                         + b' ' + str(self.udp_port).encode() + self.end_of_command
+        print(f"udp port: {self.udp_port}")
+        print(f"{connection_str}")
         self.socket_TCP.connect((self.hostname, self.port))
 
         # 2
@@ -148,17 +156,14 @@ class WrappedSocketClient:
             while True:
                 pass
         except KeyboardInterrupt:
-            print("Closing Time, Time for the last Call...")
-        print("Ouch it's closed")
+            try:
+                self.socket_TCP.send(b'EXIT\n')
+                print(f'{self.nick} "ELVIS" - HAS LEFT THE BUILDING')
+                exit()
+            except Exception as error:
+                print(f"something went wrong while exiting: {error}")
 
     def registration(self):
-        # self.nick = str((input("Please enter your nickname:>").split(':>')[0]))
-        # print(self.nick)
-        # self.hostname = str((input("Please give us your IP:>").split(':>')[0]))
-        # print(self.hostname)
-        # self.port = int(input("Please give us the port of the Server:>").split(":>")[0])
-        # print(self.port)
-
         # Sanity Checks before connection to server
         if not self.check_for_correct_ip() and self.hostname != "localhost":
             print("ERROR INCORRECT FORMAT IDENTIFIER IP")
@@ -186,6 +191,30 @@ class WrappedSocketClient:
 
         return result
 
+    def update_buddy_list(self, full_command, **kwargs):
+        self.buddy_list_lock.acquire()
+        if full_command:
+            try:
+                port = int(full_command.pop().decode().replace("\n", ""))
+                ip = full_command.pop().decode()
+                screen_name = full_command.pop().decode()
+                if not self.buddy_list.get(screen_name):
+                    print(f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}")
+                    self.buddy_list[screen_name] = (ip, port)
+            finally:
+                self.buddy_list_lock.release()
+        else:
+            try:
+                for screen_name, identity in kwargs.items():
+                    if not self.buddy_list.get(screen_name):
+                        print(f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}")
+                        self.buddy_list[screen_name] = identity
+            finally:
+                self.buddy_list_lock.release()
+
+    def delete_buddy(selfself, full_command):
+        pass
+
     def client_Thread_Start(self, clientSocket: socket = None):
         start_new_thread(self.client_Thread_Send, (self.socket_UDP,), )
         start_new_thread(self.client_Thread_Read, (self.socket_UDP,), )
@@ -193,11 +222,11 @@ class WrappedSocketClient:
 
     def client_Thread_Send(self, clientSocket: socket = None):
         while True:
-            message = input("send:>").split(':>')[0]
+            message = input(f"{color.Fore.CYAN}send{color.Fore.RESET}:>").split(':>')[0]
             try:
                 self.buddy_list_lock.acquire()
                 for screen_name, identity in self.buddy_list.items():
-                    print(f"SENDING MESSAGE {message}")
+                    print(f"SENDING MESSAGE {message} IDENTITY:{identity}")
                     clientSocket.sendto(self.commands_send[b'MESG'] + self.nick.encode() + b':'
                                         + message.encode() + b'\n', identity)
             except Exception as e:
@@ -206,121 +235,136 @@ class WrappedSocketClient:
                 self.buddy_list_lock.release()
 
     def client_Thread_TCP(self, clientSocket: socket = None):
-        while True:
-            full_command = b''
-            # read in a message from the Read Thread
-            while full_command.find(b'\n') == -1:
-                full_command += clientSocket.recv(1048)
+        try:
+            while True:
+                full_command = b''
+                # read in a message from the Read Thread
+                while full_command.find(b'\n') == -1:
+                    full_command += clientSocket.recv(1048)
 
-            # parse that message
-            full_command = (re.sub(b'.\n|:', b' ', full_command)).split(b' ')
-            # full_command.reverse()
-            # a part of parsing make sure it's a valid command before we parse
-            handle = self.parse_and_build.parser_mux_recv[full_command[0]]
+                # parse that message
+                full_command = full_command.replace(b'\n', b' ')
+                full_command = (re.sub(b':', b' ', full_command)).split(b' ')
+                # full_command.reverse()
+                # a part of parsing make sure it's a valid command before we parse
+                handle = self.parse_and_build.parser_mux_recv[full_command[0]]
 
-            if handle:
-                keyword_args = self.parse_and_build.commands_recv[full_command[0]][1]
-                arguments = {}
-                full_command.reverse()
-                cmd = full_command.pop()
-                full_command = full_command[1:]
-                while len(full_command) > 1:
-                    if cmd != b'ACPT':
-                        for key in keyword_args:
-                            arguments[key] = full_command.pop()
-                    else:
-                        # full_command.reversed()
-                        print("THIS IS THE FULLCOMMAND: " + str(full_command))
-                        self.buddy_list_lock.acquire()
-                        try:
-                            screen_name = full_command.pop()
-                            ip = full_command.pop()
-                            port = full_command.pop()
-                            self.buddy_list[screen_name] = (str(ip.decode()),
-                                                            int(str(port.decode())))
-                        except Exception as e:
-                            print(e)
-                        finally:
-                            print("THIS IS THE BUDDY LIST IN Thread Read:" + str(self.buddy_list))
-                            self.buddy_list_lock.release()
-                            continue
-                        # screen_name = full_command.pop()
-                        # ip = full_command.pop()
-                        # port = full_command.pop()
-                        # self.buddy_list_lock.acquire()
-                        # try:
-                        #     self.buddy_list[screen_name] = (ip.decode(), int(port.decode()))
-                        # finally:
-                        #     print("THIS IS THE BUDDY LIST:" + str(self.buddy_list))
-                        #     self.buddy_list_lock.release()
+                if handle:
+                    keyword_args = self.parse_and_build.commands_recv[full_command[0]][1]
+                    arguments = {}
+                    full_command.reverse()
+                    cmd = full_command.pop()
+                    full_command = full_command[1:]
+                    while len(full_command) > 1:
+                        if cmd != b'ACPT':
+                            for key in keyword_args:
+                                arguments[key] = full_command.pop()
+                        else:
+                            # full_command.reverse()
+                            print(full_command)
+                            kwar = {}
+                            while len(full_command) > 0:
+                                screen_name = full_command.pop().decode()
+                                ip = full_command.pop().decode()
+                                port = int(str(full_command.pop().decode()))
+                                kwar[screen_name] = (ip, port)
+                                print(f"port: {port}")
+                            if len(kwar.items()) > 0:
+                                self.update_buddy_list(None, **kwar)
+
+
+        except KeyboardInterrupt as e:
+            clientSocket.send(b'EXIT\n')
+            print(f'{self.nick} "ELVIS" - HAS LEFT THE BUILDING')
 
     def client_Thread_Read(self, clientSocket: socket = None):
-        while True:
-            full_command = b''
-            # read in a message from the Read Thread
-            while full_command.find(b'\n') == -1:
-                full_command += clientSocket.recvfrom(1048)[0]
+        try:
+            while True:
+                full_command = b''
+                # read in a message from the Read Thread
+                while full_command.find(b'\n') == -1:
+                    full_command += clientSocket.recvfrom(1048)[0]
 
-            # parse that message
-            if self.commands_recv[b'MESG'][0] in full_command:
-                full_command = (re.sub(b'.\n|:', b' ', full_command)).split(b' ')
-                full_command.reverse()
-                # a part of parsing make sure it's a valid command before we parse
-                handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
+                # parse that message
+                if self.commands_recv[b'MESG'][0] in full_command:
+                    full_command = (re.sub(b':', b' ', full_command)).replace(b'\n', b'').split(b' ')
+                    full_command.reverse()
+                    # a part of parsing make sure it's a valid command before we parse
+                    command = full_command.pop()
+                    screen_name = full_command.pop()
+                    handle = self.parse_and_build.parser_mux_recv[command]
+                    full_command.reverse()
+                    result = []
+                    result.append(b' '.join(full_command))
+                    result.append(screen_name)
+                    result.append(command)
+                    full_command = result
 
-            elif self.commands_recv[b'ACPT'][0] in full_command:
-                full_command = re.sub(b'\n', b'', full_command)
-                print("THIS IS THE FULLCOMMAND: " + str(full_command))
-                full_command.replace(b'ACPT ', b'')
-                # full_command = b':'.join(full_command)
-                parse_full_command = full_command.split(b':')
-                self.buddy_list_lock.acquire()
-                try:
-                    self.buddy_list[parse_full_command.pop()] = (str(parse_full_command.pop()),
-                                                                 int(str(parse_full_command.pop())))
-                finally:
-                    print("THIS IS THE BUDDY LIST IN Thread Read:" + str(self.buddy_list))
-                    self.buddy_list_lock.release()
+                elif self.commands_recv[b'ACPT'][0] in full_command:
+                    full_command = re.sub(b'\n', b'', full_command)
+
+                    full_command.replace(b'ACPT ', b'')
+                    # full_command = b':'.join(full_command)
+                    parse_full_command = full_command.split(b':')
+                    self.update_buddy_list(parse_full_command)
                     continue
 
-            elif self.commands_recv[b'JOIN'][0] in full_command:
-                full_command.replace(b'JOIN ', b'')
+                elif self.commands_recv[b'JOIN'][0] in full_command:
+                    full_command.replace(b'JOIN ', b'')
+                    full_command.replace(b'\n', b'')
 
-                pop_full_command = full_command.split(b' ')
-                self.buddy_list_lock.acquire()
-                try:
-                    self.buddy_list[pop_full_command.pop()] = (str(pop_full_command.pop()),
-                                                               int(str(pop_full_command.pop())))
-                finally:
-                    print("THIS IS THE BUDDY LIST IN Thread Read:" + str(self.buddy_list))
-                    self.buddy_list_lock.release()
+                    pop_full_command = full_command.split(b' ')
+                    print(f"JOIN: {pop_full_command}")
+                    self.update_buddy_list(pop_full_command)
                     continue
-            else:
-                full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
-                full_command.reverse()
-                # a part of parsing make sure it's a valid command before we parse
-                handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
+                else:
+                    full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
+                    full_command.reverse()
+                    # a part of parsing make sure it's a valid command before we parse
+                    handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
 
-            if handle:
-                keyword_args = self.parse_and_build.commands_recv[full_command[-1]][1]
-                arguments = {}
-                cpy_command = full_command.copy()
-                cmd = full_command.pop()
-                while len(full_command) > 1:
-                    if cmd != b'ACPT':
-                        for key in keyword_args:
-                            arguments[key] = full_command.pop()
-                        arguments['full_message'] = cpy_command
-                    else:
-                        pass
+                if handle:
+                    keyword_args = self.parse_and_build.commands_recv[full_command[-1]][1]
+                    arguments = {}
+                    cpy_command = full_command.copy()
+                    cmd = full_command.pop()
+                    while len(full_command) > 1:
+                        if cmd != b'ACPT':
+                            for key in keyword_args:
+                                arguments[key] = full_command.pop()
+                            arguments['full_message'] = cpy_command
+                        else:
+                            # full_command.reverse()
+                            print(f"ACPT: {full_command}")
+                            kwar = {}
+                            while len(full_command) > 0:
+                                screen_name = full_command.pop().decode()
+                                ip = full_command.pop().decode()
+                                port = int(full_command.pop().decode())
+                                kwar[screen_name] = (ip, port)
 
-                response = b''
+                            if len(kwar.items()) > 0:
+                                self.update_buddy_list(None, **kwar)
 
-                if cmd != b'ACPT' and cmd:
-                    response = handle(**arguments)
+                    response = ""
 
-                if response:
-                    print(response)
+                    if cmd != b'ACPT' and cmd:
+                        response = handle(**arguments)
+
+                    if response:
+                        print(response)
+
+        except KeyboardInterrupt as e:
+            do_something = {"screen_name": self.nick}
+            exit_msg = self.parse_and_build.exit_client(**do_something)
+            try:
+                self.buddy_list_lock.acquire()
+                for screen_name, identity in self.buddy_list.items():
+                    clientSocket.sendto(exit_msg, identity)
+            except Exception as e:
+                print(e)
+            finally:
+                self.buddy_list_lock.release()
 
 
 if __name__ == '__main__':
