@@ -2,8 +2,8 @@
 Author: Blake D. De Garza
 UTEID: bd6225
 DATE: 01/16/2021
-
-Object Oriented client for Lab2
+DUE: 02/14/2021 at 11:59pm
+Object Oriented client, Project 1
 """
 import argparse
 import re
@@ -11,7 +11,7 @@ import socket
 from _thread import start_new_thread
 import random
 from threading import Lock
-from typing import ByteString, cast
+from typing import ByteString
 import colorama as color
 
 
