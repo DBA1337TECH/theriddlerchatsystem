@@ -50,12 +50,13 @@ class CommandParserAndBuilder:
         }
 
     @staticmethod
-    def join_handle_recv(**kwargs) -> str:
+    def join_handle_recv(screen_name) -> bool:
         """ receives the RECV command and handles as neccesary"""
-        screen_name = "screen_name"
-        result = f"{kwargs[screen_name]} has entered the room"
-        print(result)
-        return result
+        if screen_name:
+            result = f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}"
+            print(result)
+
+        return True if screen_name else False
 
     @staticmethod
     def mesg_handle_recv(**kwargs) -> str:
@@ -71,11 +72,11 @@ class CommandParserAndBuilder:
     def exit_handle_recv(**kwargs) -> str:
         """ receives the EXIT command and handles as neccesary"""
         screen_name = 'screen_name'
-        return f'{kwargs[screen_name]} has left the room\n'
+        return f'{kwargs[screen_name].decode()} has left the room\n'
 
     @staticmethod
     def acpt_handle_recv(**kwargs):
-        """ receives the ACPT command and handles as neccesary"""
+        """ receives the ACPT command and handles as neccesary design decesion to implement in the thread"""
         pass
 
     @staticmethod
@@ -93,7 +94,6 @@ class CommandParserAndBuilder:
         screen_name = 'screen_name'
         message = 'message'
         result = F"MESG {kwargs[screen_name]}: {kwargs[message]}\n".encode()
-        print(f"THIS IS WHAT WE ARE SENDING: {result}")
         return result
 
     @staticmethod
@@ -116,7 +116,7 @@ class WrappedSocketClient:
     commands_recv = {
         b'JOIN': b'JOIN ',
         b'MESG': b'MESG ',
-        'EXIT': b'EXIT ',
+        b'EXIT': b'EXIT ',
         b'ACPT': b'ACPT ',
     }
 
@@ -144,8 +144,8 @@ class WrappedSocketClient:
         self.socket_UDP.bind((self.hostname, self.udp_port))
         connection_str = self.commands_send[b'HELO'] + self.nick.encode() + b' ' + self.hostname.encode() \
                          + b' ' + str(self.udp_port).encode() + self.end_of_command
-        print(f"udp port: {self.udp_port}")
-        print(f"{connection_str}")
+        # print(f"udp port: {self.udp_port}")
+        # print(f"{connection_str}")
         self.socket_TCP.connect((self.hostname, self.port))
 
         # 2
@@ -199,7 +199,7 @@ class WrappedSocketClient:
                 ip = full_command.pop().decode()
                 screen_name = full_command.pop().decode()
                 if not self.buddy_list.get(screen_name):
-                    print(f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}")
+                    self.parse_and_build.join_handle_recv(screen_name)
                     self.buddy_list[screen_name] = (ip, port)
             finally:
                 self.buddy_list_lock.release()
@@ -207,13 +207,27 @@ class WrappedSocketClient:
             try:
                 for screen_name, identity in kwargs.items():
                     if not self.buddy_list.get(screen_name):
-                        print(f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}")
+                        self.parse_and_build.join_handle_recv(screen_name)
                         self.buddy_list[screen_name] = identity
             finally:
                 self.buddy_list_lock.release()
 
-    def delete_buddy(selfself, full_command):
-        pass
+    def delete_buddy_from_list(self, full_command):
+        try:
+            self.buddy_list_lock.acquire()
+            if full_command:
+                try:
+                    full_command.pop().decode() # discard the cmd we assume it is b'EXIT <screenname>'
+                    screen_name = full_command.pop().decode()
+                    if self.buddy_list.get(screen_name):
+                        print(f"{color.Fore.RED}{screen_name} has been deleted from the list{color.Fore.RESET}")
+                        self.buddy_list.pop(screen_name)
+                finally:
+                    pass
+            else:
+                print('full_command is false, i.e. null or None')
+        finally:
+            self.buddy_list_lock.release()
 
     def client_Thread_Start(self, clientSocket: socket = None):
         start_new_thread(self.client_Thread_Send, (self.socket_UDP,), )
@@ -226,7 +240,6 @@ class WrappedSocketClient:
             try:
                 self.buddy_list_lock.acquire()
                 for screen_name, identity in self.buddy_list.items():
-                    print(f"SENDING MESSAGE {message} IDENTITY:{identity}")
                     clientSocket.sendto(self.commands_send[b'MESG'] + self.nick.encode() + b':'
                                         + message.encode() + b'\n', identity)
             except Exception as e:
@@ -243,10 +256,13 @@ class WrappedSocketClient:
                     full_command += clientSocket.recv(1048)
 
                 # parse that message
+
                 full_command = full_command.replace(b'\n', b' ')
                 full_command = (re.sub(b':', b' ', full_command)).split(b' ')
                 # full_command.reverse()
                 # a part of parsing make sure it's a valid command before we parse
+                if full_command[0] == b'EXIT':
+                    continue
                 handle = self.parse_and_build.parser_mux_recv[full_command[0]]
 
                 if handle:
@@ -300,26 +316,28 @@ class WrappedSocketClient:
                     result.append(command)
                     full_command = result
 
-                elif self.commands_recv[b'ACPT'][0] in full_command:
+                elif self.commands_recv[b'ACPT'] in full_command:
                     full_command = re.sub(b'\n', b'', full_command)
-
+                    print(full_command)
                     full_command.replace(b'ACPT ', b'')
                     # full_command = b':'.join(full_command)
                     parse_full_command = full_command.split(b':')
+                    if len(parse_full_command) == 1:
+                        parse_full_command = full_command.split(b' ')
                     self.update_buddy_list(parse_full_command)
                     continue
 
-                elif self.commands_recv[b'JOIN'][0] in full_command:
+                elif self.commands_recv[b'JOIN'] in full_command:
                     full_command.replace(b'JOIN ', b'')
                     full_command.replace(b'\n', b'')
 
                     pop_full_command = full_command.split(b' ')
-                    print(f"JOIN: {pop_full_command}")
                     self.update_buddy_list(pop_full_command)
                     continue
                 else:
                     full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
                     full_command.reverse()
+                    print(f'full command: {full_command}')
                     # a part of parsing make sure it's a valid command before we parse
                     handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
 
@@ -328,9 +346,12 @@ class WrappedSocketClient:
                     arguments = {}
                     cpy_command = full_command.copy()
                     cmd = full_command.pop()
-                    while len(full_command) > 1:
+                    print(cmd)
+                    while len(full_command) >= 1:
                         if cmd != b'ACPT':
                             for key in keyword_args:
+                                print(key)
+                                print(full_command)
                                 arguments[key] = full_command.pop()
                             arguments['full_message'] = cpy_command
                         else:
@@ -352,6 +373,10 @@ class WrappedSocketClient:
                         response = handle(**arguments)
 
                     if response:
+                        if handle == self.parse_and_build.parser_mux_recv[b'EXIT']:
+                            # special case to remove a buddy from the list
+                            self.delete_buddy_from_list(arguments['full_message'])
+
                         print(response)
 
         except KeyboardInterrupt as e:
