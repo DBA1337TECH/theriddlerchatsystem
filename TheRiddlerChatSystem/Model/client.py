@@ -220,7 +220,7 @@ class WrappedSocketClient:
                     full_command.pop().decode() # discard the cmd we assume it is b'EXIT <screenname>'
                     screen_name = full_command.pop().decode()
                     if self.buddy_list.get(screen_name):
-                        print(f"{color.Fore.RED}{screen_name} has been deleted from the list{color.Fore.RESET}")
+                        # print(f"{color.Fore.RED}{screen_name} has been deleted from the list{color.Fore.RESET}")
                         self.buddy_list.pop(screen_name)
                 finally:
                     pass
@@ -277,14 +277,12 @@ class WrappedSocketClient:
                                 arguments[key] = full_command.pop()
                         else:
                             # full_command.reverse()
-                            print(full_command)
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()
                                 ip = full_command.pop().decode()
                                 port = int(str(full_command.pop().decode()))
                                 kwar[screen_name] = (ip, port)
-                                print(f"port: {port}")
                             if len(kwar.items()) > 0:
                                 self.update_buddy_list(None, **kwar)
 
@@ -318,7 +316,6 @@ class WrappedSocketClient:
 
                 elif self.commands_recv[b'ACPT'] in full_command:
                     full_command = re.sub(b'\n', b'', full_command)
-                    print(full_command)
                     full_command.replace(b'ACPT ', b'')
                     # full_command = b':'.join(full_command)
                     parse_full_command = full_command.split(b':')
@@ -337,7 +334,7 @@ class WrappedSocketClient:
                 else:
                     full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
                     full_command.reverse()
-                    print(f'full command: {full_command}')
+                    # print(f'full command: {full_command}')
                     # a part of parsing make sure it's a valid command before we parse
                     handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
 
@@ -346,17 +343,13 @@ class WrappedSocketClient:
                     arguments = {}
                     cpy_command = full_command.copy()
                     cmd = full_command.pop()
-                    print(cmd)
                     while len(full_command) >= 1:
                         if cmd != b'ACPT':
                             for key in keyword_args:
-                                print(key)
-                                print(full_command)
                                 arguments[key] = full_command.pop()
                             arguments['full_message'] = cpy_command
                         else:
                             # full_command.reverse()
-                            print(f"ACPT: {full_command}")
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()
