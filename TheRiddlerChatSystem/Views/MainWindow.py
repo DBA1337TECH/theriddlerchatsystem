@@ -51,7 +51,7 @@ class MainWindow(QMainWindow):
 
         self.setGeometry(300, 300, 796, 650)
 
-        self.setWindowTitle('Steganography Prototype')
+        self.setWindowTitle('The Riddler Chat System')
 
         self.setWindowIcon(QIcon(os.getcwd() + '/images/1337_Logo_small.png'))
 

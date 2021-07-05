@@ -276,7 +276,6 @@ class WrappedSocketClient:
                             for key in keyword_args:
                                 arguments[key] = full_command.pop()
                         else:
-                            # full_command.reverse()
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()
@@ -317,7 +316,7 @@ class WrappedSocketClient:
                 elif self.commands_recv[b'ACPT'] in full_command:
                     full_command = re.sub(b'\n', b'', full_command)
                     full_command.replace(b'ACPT ', b'')
-                    # full_command = b':'.join(full_command)
+
                     parse_full_command = full_command.split(b':')
                     if len(parse_full_command) == 1:
                         parse_full_command = full_command.split(b' ')
@@ -334,7 +333,7 @@ class WrappedSocketClient:
                 else:
                     full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
                     full_command.reverse()
-                    # print(f'full command: {full_command}')
+
                     # a part of parsing make sure it's a valid command before we parse
                     handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
 
@@ -349,7 +348,6 @@ class WrappedSocketClient:
                                 arguments[key] = full_command.pop()
                             arguments['full_message'] = cpy_command
                         else:
-                            # full_command.reverse()
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()

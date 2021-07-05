@@ -8,7 +8,7 @@ import sys
 from PyQt5.QtCore import Qt
 #from StenographyController import StenographyController
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton
+from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit
 
 from TheRiddlerChatSystem.Model.CustomLabel import *
 
@@ -38,10 +38,10 @@ class LandingPage(BaseView.BaseView):
 
     def initUI(self):
         """Initializes the UI Landing Page"""
-        filePathHiddenImage = QPushButton("Hide This Data", self)
-        folderButton = QPushButton("Get Image to Be Seen", self)
+        filePathHiddenImage = QTextEdit("TheRiddlerChatSystem conversation", self)
+        folderButton = QTextEdit("TheRiddlerChatSystem Message Here", self)
         folder_button = QPushButton("Click to Password Protect", self)
-        go_baby_go = QPushButton("Go-Baby-Go", self)
+        go_baby_go = QPushButton("SEND", self)
 
         # format the buttons to look differently
         folder_button.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
@@ -54,8 +54,9 @@ class LandingPage(BaseView.BaseView):
         #self.hiddenImageController = StenographyController(self, filePathHiddenImage, folderButton, folder_button,
         #                                                  go_baby_go)
 
-        fileItems = QDockWidget("Data to be retrieved", self)
-        folderItems = QDockWidget("Image to Be Seen Publicly", self)
+        fileItems = QDockWidget("Chat Messages", self)
+        fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
+        folderItems = QDockWidget("Type a Message to be sent", self)
         viewOne = QPixmap(os.getcwd() + '/images/SP_logo.png')
 
         # Adjust the Font
@@ -70,7 +71,7 @@ class LandingPage(BaseView.BaseView):
 
         self.p2 = viewOne
 
-        self.setWindowTitle('Stenography Prototype')
+        self.setWindowTitle('TheRiddlerChatSystem')
 
         fileItems.setWidget(filePathHiddenImage)
         fileItems.setFloating(False)
