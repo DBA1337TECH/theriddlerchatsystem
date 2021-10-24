@@ -11,14 +11,14 @@ sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
 
 
-class RecvChatBox(ClickMixIn, QTextEdit):
+class MsgChatBox(ClickMixIn, QTextEdit):
     """
     RecvChatBox is an extension of QTextEdit to allow it to accept the click event
     """
     clickable = pyqtSignal()
 
     def __init__(self, name, view):
-        super(RecvChatBox, self).__init__(name, view)
+        super(MsgChatBox, self).__init__(name, view)
 
     def mousePressEvent(self, mouse_event: QMouseEvent):
         self.clickable.emit()

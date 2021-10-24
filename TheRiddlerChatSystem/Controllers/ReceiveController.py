@@ -20,4 +20,4 @@ class ReceiveController(BaseController.BaseController):
         self.clicks = 0
 
     def receive_and_print(self):
-        print(me + "clicked the Recieve Chat Box from ReceiveController")
+        print(me + "clicked the Receive Chat Box from ReceiveController")

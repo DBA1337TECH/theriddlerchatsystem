@@ -10,8 +10,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
 
+from TheRiddlerChatSystem.Controllers.MessageController import MessageController
 from TheRiddlerChatSystem.Model.CustomLabel import *
 from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
+from TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
 from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
 
 sys.path.insert(0, '../Controllers')
@@ -41,38 +43,38 @@ class LandingPage(BaseView.BaseView):
 
     def initUI(self):
         """Initializes the UI Landing Page"""
-        filePathHiddenImage = RecvChatBox("TheRiddlerChatSystem conversation", self)
-        folderButton = QTextEdit("TheRiddlerChatSystem Message Here", self)
-        folder_button = QPushButton("Click to Password Protect", self)
-        Villian_List = QListWidget(self)
+        receive_chat_box = RecvChatBox("TheRiddlerChatSystem conversation", self)
+        message_chat_box = MsgChatBox("TheRiddlerChatSystem Message Here", self)
+        password_protect_button = QPushButton("Click to Password Protect", self)
+        villain_list = QListWidget(self)
         go_baby_go = QPushButton("SEND", self)
 
 
 
 
         # format the buttons to look differently
-        folder_button.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
-        Villian_List.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
-        folderButton.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
-        filePathHiddenImage.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
+        password_protect_button.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
+        villain_list.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
+        message_chat_box.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
+        receive_chat_box.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
         go_baby_go.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
 
         # Create and Attach Controllers
         # noinspection PyAttributeOutsideInit
-        #self.hiddenImageController = StenographyController(self, filePathHiddenImage, folderButton, folder_button,
+        #self.hiddenImageController = StenographyController(self, receive_chat_box, message_chat_box, password_protect_button,
         #                                                  go_baby_go)
 
         ####ADD LISTS AS MOCKUP####
-        Villian_List.addItem("Silver_Surfer")
-        Villian_List.addItem("Mr_Freeze")
-        Villian_List.addItem("SaberT00th")
-        Villian_List.addItem("RasAlGhul")
-        Villian_List.addItem("Venom")
-        Villian_List.addItem("Green_Goblin")
-        Villian_List.addItem("KingPin")
-        Villian_List.addItem("Mr_Smith")
-        Villian_List.addItem("General_Zod")
-        Villian_List.addItem("DNS_Poisoned_Ivy")
+        villain_list.addItem("Silver_Surfer")
+        villain_list.addItem("Mr_Freeze")
+        villain_list.addItem("SaberT00th")
+        villain_list.addItem("RasAlGhul")
+        villain_list.addItem("Venom")
+        villain_list.addItem("Green_Goblin")
+        villain_list.addItem("KingPin")
+        villain_list.addItem("Mr_Smith")
+        villain_list.addItem("General_Zod")
+        villain_list.addItem("DNS_Poisoned_Ivy")
 
         fileItems = QDockWidget("Chat Messages", self)
         BuddyList = QDockWidget("Fellow Villians", self)
@@ -83,10 +85,10 @@ class LandingPage(BaseView.BaseView):
         # Adjust the Font
         options_font = QFont('Courier', 14, QFont.ExtraBold)
 
-        filePathHiddenImage.setFont(options_font)
-        folderButton.setFont(options_font)
+        receive_chat_box.setFont(options_font)
+        message_chat_box.setFont(options_font)
 
-        folder_button.setFont(options_font)
+        password_protect_button.setFont(options_font)
 
         go_baby_go.setFont(options_font)
 
@@ -94,10 +96,10 @@ class LandingPage(BaseView.BaseView):
 
         self.setWindowTitle('TheRiddlerChatSystem')
 
-        fileItems.setWidget(filePathHiddenImage)
+        fileItems.setWidget(receive_chat_box)
         fileItems.setFloating(False)
 
-        folderItems.setWidget(folderButton)
+        folderItems.setWidget(message_chat_box)
         folderItems.setFloating(False)
 
         hbox = QHBoxLayout(self)
@@ -120,7 +122,7 @@ class LandingPage(BaseView.BaseView):
 
         splitter1.setOrientation(Qt.Vertical)
         splitter1.addWidget(BuddyList)
-        splitter1.addWidget(Villian_List)
+        splitter1.addWidget(villain_list)
         splitter1.addWidget(logo)
 
 
@@ -134,7 +136,7 @@ class LandingPage(BaseView.BaseView):
         bottom_right = QFrame(splitter2)
         bottom_right.setFrameShape(QFrame.StyledPanel)
         splitter2.addWidget(folderItems)
-        splitter2.addWidget(folder_button)
+        splitter2.addWidget(password_protect_button)
         splitter2.addWidget(go_baby_go)
 
         hbox.addWidget(splitter1)
@@ -150,7 +152,9 @@ class LandingPage(BaseView.BaseView):
         # Register The Controllers to link The Functionality Together
         #
         ####
-        recv = ReceiveController(self, filePathHiddenImage)
+        recv = ReceiveController(self, receive_chat_box)
+        mesg_send = MessageController(self, message_chat_box, go_baby_go)
         self.controllers.append(recv)
+        self.controllers.append(mesg_send)
 
         self.show()

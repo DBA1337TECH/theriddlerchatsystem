@@ -1,0 +1,28 @@
+# /usr/env/python3.7
+
+import os
+
+from PyQt5.QtWidgets import QTextEdit, QPushButton
+
+from TheRiddlerChatSystem.Controllers import BaseController
+from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
+
+me = '[MessageController]'
+
+
+class MessageController(BaseController.BaseController):
+
+    def __init__(self, view, msg_box, send_button):
+        super(MessageController, self).__init__(view)
+        self.ChatMsg: RecvChatBox = msg_box
+        self.SendButton: QPushButton = send_button
+        self.ChatMsg.clickable.connect(self.receive_and_print)
+        self.SendButton.clicked.connect(self.send_button_print)
+        self.view = view
+        self.clicks = 0
+
+    def receive_and_print(self):
+        print(me + "clicked the Recieve Chat Box from ReceiveController")
+
+    def send_button_print(self):
+        print(me + "SEND THIS SON")
