@@ -29,11 +29,3 @@ class ButtonController(BaseController.BaseController):
     def ClickedTheMap(self):
         self.clicks += 1
         print(self.view.label.curiousposition)
-        self.view.label2.rotation += 15
-        self.view.label2.rotate_pixmap(self.view.label2.rotation)
-        self.view.label2.move(int(self.view.label.curiousposition[0]), int(self.view.label.curiousposition[1]))
-        if self.clicks == 10:
-            self.viewp1 = QPixmap(os.getcwd() + '/images/Nuke2.png')
-            self.view.label2.setPixmap(self.viewp1)
-            self.view.label2.resize(75, 75)
-        self.view.show()

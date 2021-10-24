@@ -2,9 +2,26 @@
 """
 Turns a non clickable object such as a label into a clickable object
 """
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import QEvent, pyqtSignal, QObject
 
 me = '[Clickable]'
+
+
+class ClickMixIn:
+    clicked = pyqtSignal()
+
+    def clickable(self, widget):
+        class EventFilter(QObject):
+            def eventFilter(self, obj, event):
+                if obj == widget:
+                    if event.type() == QEvent.MouseButtonRelease:
+                        self.clicked.emit()
+                        return True
+                return False
+        filter_obj = EventFilter()
+        self.installEventFilter(filter_obj)
+        return self.clicked
 
 
 def clickable(widget):
