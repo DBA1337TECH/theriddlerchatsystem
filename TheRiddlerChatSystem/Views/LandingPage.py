@@ -10,11 +10,14 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
 
+from TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
 from TheRiddlerChatSystem.Controllers.MessageController import MessageController
+from TheRiddlerChatSystem.Controllers.VillainController import VillainController
 from TheRiddlerChatSystem.Model.CustomLabel import *
 from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
 from TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
 from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
+from TheRiddlerChatSystem.Model.VillainList import VillainList
 
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
@@ -46,7 +49,7 @@ class LandingPage(BaseView.BaseView):
         receive_chat_box = RecvChatBox("TheRiddlerChatSystem conversation", self)
         message_chat_box = MsgChatBox("TheRiddlerChatSystem Message Here", self)
         password_protect_button = QPushButton("Click to Password Protect", self)
-        villain_list = QListWidget(self)
+        villain_list = VillainList(self)
         go_baby_go = QPushButton("SEND", self)
 
 
@@ -154,7 +157,11 @@ class LandingPage(BaseView.BaseView):
         ####
         recv = ReceiveController(self, receive_chat_box)
         mesg_send = MessageController(self, message_chat_box, go_baby_go)
+        villains = VillainController(self, villain_list)
         self.controllers.append(recv)
         self.controllers.append(mesg_send)
+        self.controllers.append(villains)
+
+        self.app = ApplicationController(self, self.controllers)
 
         self.show()

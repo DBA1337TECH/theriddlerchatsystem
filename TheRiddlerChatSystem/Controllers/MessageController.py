@@ -22,7 +22,7 @@ class MessageController(BaseController.BaseController):
         self.clicks = 0
 
     def receive_and_print(self):
-        print(me + "clicked the Recieve Chat Box from ReceiveController")
+        print(me + "clicked a component from the MessageController")
 
     def send_button_print(self):
         print(me + "SEND THIS SON")
