@@ -17,4 +17,4 @@ class BaseController(object):
             print(me + 'ERROR>We are not a BaseView')
 
     def ActiveListener(self):
-        print('called from the controller')
+        print('called from the Base controller')

@@ -32,42 +32,38 @@ class CryptoTools:
         self.nonce = None
         self.tag = None
 
-    '''
-    Generates a Random key of 256 bits
-    Returns 256 bit random key
-    '''
-
     def RandomKey256(self):
+        """
+        Generates a Random key of 256 bits
+        Returns 256 bit random key
+        """
         key = get_random_bytes(32)  # generate a random 256bit key
         return key
 
-    '''
-    Generates a Random key of 128 bits
-    returns 128 bit random key
-    '''
-
     def RandomKey128(self):
+        """
+        Generates a Random key of 128 bits
+        returns 128 bit random key
+        """
         key = get_random_bytes(16)
         return key
 
-    '''
-    Generate a Random Number in this case will be known as a salt
-    @size is the size in bytes of the random number to be generated
-    Returns random number of user defined size
-    '''
-
     def RandomNumber(self, size):
+        """
+        Generate a Random Number in this case will be known as a salt
+        @size is the size in bytes of the random number to be generated
+        Returns random number of user defined size
+        """
         salt = get_random_bytes(size)
         self.salt = salt
         return salt
 
-    '''
-    Sha256 digest
-    @mesg is the data to hash
-    returns SHA256 of a message
-    '''
-
     def Sha256(self, mesg):
+        """
+        Sha256 digest
+        @mesg is the data to hash
+        returns SHA256 of a message
+        """
         self.hash = SHA256.new()
         self.hash.update(mesg)
         hash = self.hash.digest()
@@ -92,14 +88,13 @@ class CryptoTools:
 
         return ciphertext + self.tag
 
-    '''
-    AES-EAX decrypt
-    @cipherdata is encrypted data
-    @key is key to be used for decryption (same key for encryption)
-    returns the plain text of the encyrpted data
-    '''
-
     def AesDecryptEAX(self, cipherdata, key):
+        """
+        AES-EAX decrypt
+        @cipherdata is encrypted data
+        @key is key to be used for decryption (same key for encryption)
+        returns the plain text of the encyrpted data
+        """
         print(b'AES-Decrypt:' + self.nonce)
         self.cipher = AES.new(key, AES.MODE_EAX, nonce=self.nonce)
         self.nonce = self.cipher.nonce
@@ -113,15 +108,14 @@ class CryptoTools:
         except ValueError:
             print(me + 'Key incorrect or message is corrupted')
 
-    '''
-    AES-CBC encryption, encrypts data
-    @key is the key for encyrption
-    @iv is the initialization vector (usually salt + key)
-    @plaintext is data to be encyrpted
-    Returns cipher text
-    '''
-
     def AesCbcEncrypt(self, key, iv, plaintext):
+        """
+        AES-CBC encryption, encrypts data
+        @key is the key for encyrption
+        @iv is the initialization vector (usually salt + key)
+        @plaintext is data to be encyrpted
+        Returns cipher text
+        """
         paddedplain = pad(plaintext)
         self.cipher = AES.new(key, AES.MODE_CBC, iv)
         self.mode = AES.MODE_CBC
@@ -133,27 +127,29 @@ class CryptoTools:
 
         return cipher_text
 
-    '''
-    AES-CBC decryption, decrypts data
-    @key is the key for encryption
-    @iv is the initialization vector (salt + key, usually)
-    @ciphertext is the encyrpted data to be decrypted
-    '''
+
 
     def AesCbcDecrypt(self, key, iv, ciphertext):
+        """
+        AES-CBC decryption, decrypts data
+        @key is the key for encryption
+        @iv is the initialization vector (salt + key, usually)
+        @ciphertext is the encyrpted data to be decrypted
+        """
         self.cipher = AES.new(key, AES.MODE_CBC, iv)
         self.mode = AES.MODE_CBC
         plaintext = self.cipher.decrypt(ciphertext)
         return unpad(plaintext)
 
-    '''
-    RSA Encrypt, Encypts an arbitrary amount of data
-    TODO:Integrate with pycryptodome
-    @key is the key for encryption
-    @plaintext is the plaintext data to be encrypted
-    '''
+
 
     def RSAEncrypt(self, key, plaintext):
+        """
+        RSA Encrypt, Encypts an arbitrary amount of data
+        TODO:Integrate with pycryptodome
+        @key is the key for encryption
+        @plaintext is the plaintext data to be encrypted
+        """
         chunkarray = []
         ciphertext = b''
         padding = 11  # PKCS1_OAEP padding length
@@ -179,14 +175,15 @@ class CryptoTools:
 
         return ciphertext
 
-    '''
-    RSA Encrypt, Encypts an arbitrary amount of data
-    TODO:Integrate with pycryptodome
-    @key is the key for encryption
-    @ciphertext is the plaintext data to be encrypted
-    '''
+
 
     def RSADecrypt(self, key, cipherText):
+        """
+        RSA Encrypt, Encypts an arbitrary amount of data
+        TODO:Integrate with pycryptodome -- DONE, TESTED SUCCESSFULLY
+        @key is the key for encryption
+        @ciphertext is the plaintext data to be encrypted
+        """
         chunkarray = []
         plaintext = b''
         padding = 11  # PKCS1_OAEP padding length
@@ -222,11 +219,12 @@ class CryptoTools:
         return RSA.generate(keyLength)
 
 
-'''
-Testing AES EAX, AESCBC encryption/decryption, RSA encrypt/decryption
-as well as random256 bit key
-'''
+
 if __name__ == '__main__':
+    """
+    Testing AES EAX, AESCBC encryption/decryption, RSA encrypt/decryption
+    as well as random256 bit key
+    """
     crypt = CryptoTools()
     crypt.key = crypt.RandomKey256()
     b64 = base64.urlsafe_b64encode(str(crypt.key).encode())
