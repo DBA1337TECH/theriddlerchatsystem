@@ -1,10 +1,11 @@
 import os
 import sys
 
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QStyle
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIcon, QPainter, QPen
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect
 
-from TheRiddlerChatSystem.Views import LandingPage
+from TheRiddlerChatSystem.Views import LoadingPage
 
 me = '[MainWindow]'
 
@@ -42,8 +43,17 @@ class MainWindow(QMainWindow):
 
         self.initUI()
 
+    def paintEvent(self, event=None):
+        painter = QPainter(self)
+
+        painter.setOpacity(0.01)
+        painter.setBrush(Qt.white)
+        painter.setPen(QPen(Qt.white))
+        painter.drawRect(self.childrenRect())
+
     def initUI(self) -> object:
-        self.view = LandingPage.LandingPage()
+        # self.view = LandingPage.LandingPage()
+        self.view = LoadingPage.LoadingPage(window=self)
 
         self.statusBar().showMessage('StatusBar: Initialized')
 
@@ -55,8 +65,13 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(QIcon(os.getcwd() + '/images/1337_Logo_small.png'))
 
-        self.setWindowOpacity(0.85)
+        self.setWindowOpacity(1.0)
 
+        op = QGraphicsOpacityEffect(self.view)
+
+        self.setGraphicsEffect(op)
+        self.paintEvent()
+        self.setStyleSheet("background-color: red;")
         self.show()
 
 

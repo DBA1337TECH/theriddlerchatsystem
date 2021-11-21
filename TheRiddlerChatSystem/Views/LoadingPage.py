@@ -2,6 +2,7 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
+from TheRiddlerChatSystem.Views.AuthenticationView import AuthenticateView
 
 '''
 Although it is titled the Landing page it is being treated more like the initial
@@ -9,37 +10,26 @@ Setup.  Luckily this is just a view so it is subject to change, the Developer ca
 always make a view called GameBoard (as an example) which inherits the BaseView
 '''
 
-import sys, os
-from PyQt5.QtWidgets import  *
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-
-from Views.MainWindow import MainWindow
-
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
 
 from TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
-from TheRiddlerChatSystem.Model.CustomLabel import LoadingLabel, LogoLabel
+from TheRiddlerChatSystem.Model.CustomLabel import *
 from TheRiddlerChatSystem.Model.Overlay import Overlay
-import TheRiddlerChatSystem.Views.BaseView
-import TheRiddlerChatSystem.Model.ThButtonController
-from CustomLabel import *
-import PwdComplexController
+from TheRiddlerChatSystem.Views.BaseView import BaseView
+from TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 
-class LandingPage(BaseView.BaseView):
+class LoadingPage(BaseView):
 
     def __init__(self, window: MainWindow = None):
-        super(LandingPage, self).__init__()
+        super(LoadingPage, self).__init__()
         self.ctrl = None
         self.components = []
         self.p = None
         self.p2 = None
         self.mw = window
         print(window)
-        #self.initUI()
+        self.initUI()
 
 
     def initUI(self):
@@ -117,7 +107,7 @@ class LandingPage(BaseView.BaseView):
         #self.m_label.clicked.connect(self.overlay.show)
         self.logo_label.clicked.connect(self.overlay.show)
 
-        self.controller = ViewSwitcher(self)
+        self.controller = ViewSwitcher(self, AuthenticateView)
         self.m_label.clicked.connect(self.controller.SwitchOnClick)
 
 

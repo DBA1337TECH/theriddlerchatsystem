@@ -24,7 +24,7 @@ sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
 
-import CryptoTools
+from TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
 import secrets
 import json
 # import FileInterface
@@ -63,7 +63,7 @@ class ZeroKnowledgeAuthClient():
     def __init__(self, username, x, randomToken):
         G = "4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779"
         self.gknot = 3
-        self.crypt = CryptoTools.CryptoTools()
+        self.crypt = CryptoTools()
         self.x = x  # sha256(pwd)
         self.Y = modexp(gknot, int.from_bytes(self.x, byteorder='little'), self.p)
         self.r = int(secrets.choice(G))
@@ -104,7 +104,7 @@ class ZeroKnowledgeAuthServer():
     # Clients sends username and (c,z)
     # the server calculates T=Y^c g^z and verifies that c = H(Y,T',a)
     def __init__(self):
-        self.crypt = CryptoTools.CryptoTools()
+        self.crypt = CryptoTools()
         self.session = self.GenerateSession()
         self.gknot = 3
 

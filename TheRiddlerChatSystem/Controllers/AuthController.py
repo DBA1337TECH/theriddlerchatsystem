@@ -3,46 +3,31 @@ DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+import sys, os
+from typing import Any
+
+from TheRiddlerChatSystem.Model import cryptoutils
 from TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+
+from TheRiddlerChatSystem.Controllers import BaseController
 from TheRiddlerChatSystem.Views import BaseView
-from TheRiddlerChatSystem.Views import LandingPage
 
 
-class ViewSwitcher(BaseController.BaseController):
+class AuthController(BaseController.BaseController):
 
-    def __init__(self, view: BaseView = None, view_to_switch: BaseView = None):
-        super(ViewSwitcher, self).__init__(view)
+    def __init__(self, view: BaseView = None):
+        super(AuthController, self).__init__(view)
         self.view = view
-        self.view_to_switch = view_to_switch
-        #self.view.m_label.clicked.connect(self.SwitchOnClick)
-
-
-    def SwitchOnClick(self):
-        newView = self.view_to_switch(window=self.view.mw)
-        self.view.mw.setCentralWidget(newView)
-        self.newview = newView
-        self.view.mw.show()
-        self.view = newView
-
-        print("MADE IT TO SWITCHONECLICK, END")
-
-    def HandOffToRiddlerChatSystem(self):
-        newView = LandingPage.LandingPage()
-        self.view.mw.setCentralWidget(newView)
-        self.newview = newView
-        self.view.mw.show()
-        self.view = newView
+        self.result = False
 
     def getUserName(self):
-        self.username = self.newview.usernameBox.text()
+        self.username = self.view.usernameBox.text()
 
     def getPassword(self):
-        self.password = self.newview.passwordBox.text()
+        self.password = self.view.passwordBox.text()
 
     def Authenticate(self):
-        logo = ''' ____________ _________________  ___________           .__
+        logo = '''\t\t ____________ _________________  ___________           .__
         /_   \_____  \\_____  \______  \ \__    ___/___   ____ |  |__
          |   | _(__  <  _(__  <   /    /   |    |_/ __ \_/ ___\|  |  \\
          |   |/       \/       \ /    /    |    |\  ___/\  \___|   Y  \\
@@ -51,30 +36,31 @@ class ViewSwitcher(BaseController.BaseController):
         print(logo)
         print("\n\n")
         print("Beginning Registration")
+        self.result = False
         gknot = 3
 
         p = 4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779
 
-        #print(pow(gknot, 256))
+        # print(pow(gknot, 256))
         self.getUserName()
         self.getPassword()
         server = ZeroKnowledgeAuthServer()
-        crypt = CryptoTools.CryptoTools()
+        crypt = cryptoutils.CryptoTools()
         username = self.username
         x = crypt.Sha256(str(self.password).encode())
         Y = modexp(gknot, int.from_bytes(x, byteorder='little'), p)
-        server.registration(username, Y)
+        # server.registration(username, Y)
         a = server.SendSession()
         print('a: ' + str(a))
         client = ZeroKnowledgeAuthClient(username, crypt.Sha256(str(self.password).encode()),
                                          a)
-        didweAuth = server.Authenticate(username, client.c, client.zx)
-        print("Did we Authenticate: " + str(didweAuth))
-        if didweAuth:
-            print("TODO: HandOff to TheRiddlerChatSystem!")
+        # didweAuth = server.Authenticate(username, client.c, client.zx)
 
+        if server.Authenticate(username, client.c, client.zx):
+            print("Did we Authenticate: " + "True")
+            self.result = True
 
+        print(f"Did we Authenticate: {self.result}" )
         '''
         testpassword: thisIsNotThePasswordYouAreLookingFor
         '''
-
