@@ -33,6 +33,7 @@ class ViewSwitcher(BaseController.BaseController):
         self.view.mw.setCentralWidget(newView)
         self.newview = newView
         self.view.mw.show()
+        newView.mw = self.view.mw
         self.view = newView
 
     def getUserName(self):

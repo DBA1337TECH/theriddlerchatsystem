@@ -65,9 +65,14 @@ class MainWindow(QMainWindow):
 
         self.setWindowIcon(QIcon(os.getcwd() + '/images/1337_Logo_small.png'))
 
-        self.setWindowOpacity(1.0)
+        self.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_NoSystemBackground, True)
+        # self.setWindowOpacity(0.35)
 
         op = QGraphicsOpacityEffect(self.view)
+
+        self.setWindowOpacity(1.0)
 
         self.setGraphicsEffect(op)
         self.paintEvent()
