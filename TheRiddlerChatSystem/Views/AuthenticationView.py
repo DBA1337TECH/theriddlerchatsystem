@@ -67,6 +67,6 @@ class AuthenticateView(BaseView.BaseView):
         # self.viewswitch_controller: ViewSwitcher = ViewSwitcher(self, LandingPage)
         self.controller: AuthAndSwitchController = AuthAndSwitchController(self, LandingPage, ViewSwitcher)
 
-        self.passwordBox.clicked.connect(self.controller.auth_controller.Authenticate)
+        # self.passwordBox.clicked.connect(self.controller.auth_controller.Authenticate)
 
         # self.show()

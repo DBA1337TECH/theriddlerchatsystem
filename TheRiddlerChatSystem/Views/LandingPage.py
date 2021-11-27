@@ -144,9 +144,10 @@ class LandingPage(BaseView.BaseView):
 
         hbox.addWidget(splitter1)
         hbox.addWidget(splitter2)
-        self.setGeometry(300, 300, 796, 650)
+        self.setGeometry(0, 0, 250, 405)
+        self.resize(405, 250)
 
-        self.setAutoFillBackground(True)
+        self.setAutoFillBackground(False)
 
         self.setStyleSheet(background_role + darkRed + ';')
 

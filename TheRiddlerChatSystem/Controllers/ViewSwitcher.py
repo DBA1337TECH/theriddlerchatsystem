@@ -32,9 +32,16 @@ class ViewSwitcher(BaseController.BaseController):
         newView = LandingPage.LandingPage()
         self.view.mw.setCentralWidget(newView)
         self.newview = newView
-        self.view.mw.show()
+        self.view.mw.statusBar().showMessage("StatusBar: Authenticated -- PlainText Mode")
+        self.view.mw.statusBar().setStyleSheet("background-color: yellow;color: black;")
         newView.mw = self.view.mw
+        del self.view
         self.view = newView
+        self.view.mw.setMinimumSize(550, 405)
+        self.view.mw.resize(self.view.mw.minimumSizeHint())
+
+        self.view.mw.show()
+        self.view.show()
 
     def getUserName(self):
         self.username = self.newview.usernameBox.text()

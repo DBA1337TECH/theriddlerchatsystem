@@ -17,7 +17,9 @@ class AuthAndSwitchController(BaseController.BaseController):
         self.current_view.passwordBox.clicked.connect(self.open_application_on_auth)
 
     def open_application_on_auth(self):
-        if self.auth_controller.result:
+        if self.auth_controller.Authenticate():
             self.view_switcher.HandOffToRiddlerChatSystem()
             self.view_switcher.view.mw.setAttribute(Qt.WA_TranslucentBackground, False)
-            print("successful view switch to the Riddler Chat Application")
+            print("Successful view switch to the Riddler Chat Application")
+        else:
+            print("Did not Authenticate")

@@ -60,7 +60,10 @@ class AuthController(BaseController.BaseController):
             print("Did we Authenticate: " + "True")
             self.result = True
 
-        print(f"Did we Authenticate: {self.result}" )
+        print(f"Did we Authenticate: {self.result}")
+
+        return self.result
+
         '''
         testpassword: thisIsNotThePasswordYouAreLookingFor
         '''

@@ -1,9 +1,9 @@
 import os
 import sys
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QIcon, QPainter, QPen
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect
+from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect, QDesktopWidget
 
 from TheRiddlerChatSystem.Views import LoadingPage
 
@@ -43,6 +43,27 @@ class MainWindow(QMainWindow):
 
         self.initUI()
 
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.center()
+        #setup movement for frameless container
+        self.oldPos = self.pos()
+        self.show()
+
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QDesktopWidget().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+    def mousePressEvent(self, event):
+        self.oldPos = event.globalPos()
+
+    def mouseMoveEvent(self, event):
+        delta = QPoint(event.globalPos() - self.oldPos)
+        self.move(self.x() + delta.x(), self.y() + delta.y())
+        self.oldPos = event.globalPos()
+
     def paintEvent(self, event=None):
         painter = QPainter(self)
 
@@ -59,7 +80,7 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(self.view)
 
-        self.setGeometry(300, 300, 796, 650)
+        # self.setGeometry(300, 300, 796, 650)
 
         self.setWindowTitle('The Riddler Chat System')
 
@@ -76,7 +97,7 @@ class MainWindow(QMainWindow):
 
         self.setGraphicsEffect(op)
         self.paintEvent()
-        self.setStyleSheet("background-color: red;")
+        self.statusBar().setStyleSheet("background-color: red;color: white;")
         self.show()
 
 

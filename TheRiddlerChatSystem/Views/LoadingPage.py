@@ -31,9 +31,7 @@ class LoadingPage(BaseView):
         print(window)
         self.initUI()
 
-
     def initUI(self):
-
         self.p = QPixmap(os.getcwd() + '/images/DarkKnight_logo.png')
         self.logo = QPixmap(os.getcwd() + '/images/1337_TECH_NEW_LOGO.png')
 
@@ -75,6 +73,7 @@ class LoadingPage(BaseView):
         # splitter2.setGeometry(0,0,20,700)
         # #hbox.addWidget(splitter1)
         # #hbox.addWidget(top_right)
+        # self.setGeometry(250, 250, 405, 405)
         self.m_label = LoadingLabel(alignment=Qt.AlignCenter)
         self.m_label.setPixmap(self.p)
         self.m_label.setAttribute(Qt.WA_TranslucentBackground, True)
@@ -85,17 +84,10 @@ class LoadingPage(BaseView):
                                     self.logo.width(), self.logo.height())
         self.logo_label.setAttribute(Qt.WA_TranslucentBackground, True)
 
-
-
-
-
-
-
         hbox.addWidget(self.m_label)
-        #hbox.addWidget(self.logo_label)
+        # hbox.addWidget(self.logo_label)
 
-
-        self.setGeometry(300, 300, 300, 300)
+        self.setGeometry(300, 300, 250, 405)
         #
         pallete = QPalette()
         pallete.setColor(QPalette.Background, Qt.gray)
@@ -104,12 +96,10 @@ class LoadingPage(BaseView):
         self.setPalette(pallete)
 
         self.overlay = Overlay(self.m_label)
-        #self.m_label.clicked.connect(self.overlay.show)
+        # self.m_label.clicked.connect(self.overlay.show)
         self.logo_label.clicked.connect(self.overlay.show)
 
         self.controller = ViewSwitcher(self, AuthenticateView)
         self.m_label.clicked.connect(self.controller.SwitchOnClick)
 
-
-
-        #self.show()
+        # self.show()
