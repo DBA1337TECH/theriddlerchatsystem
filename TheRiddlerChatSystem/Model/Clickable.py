@@ -23,6 +23,21 @@ class ClickMixIn:
         self.installEventFilter(filter_obj)
         return self.clicked
 
+class MessageRecievedMixIn:
+    recv = pyqtSignal()
+
+    def recv(self, widget):
+        class EventFilter(QObject):
+            def eventFilter(self, obj, event):
+                if obj == widget:
+                    if event.type() == QEvent.ActionChanged:
+                        self.rev.emit()
+                        return True
+                return False
+        filter_obj = EventFilter()
+        self.installEventFilter(filter_obj)
+        return self.recv
+
 
 def clickable(widget):
     class Filter(QObject):

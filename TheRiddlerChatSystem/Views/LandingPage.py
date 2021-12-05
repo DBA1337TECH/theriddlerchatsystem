@@ -46,7 +46,7 @@ class LandingPage(BaseView.BaseView):
 
     def initUI(self):
         """Initializes the UI Landing Page"""
-        receive_chat_box = RecvChatBox("TheRiddlerChatSystem conversation", self)
+        receive_chat_box = RecvChatBox(self)
         message_chat_box = MsgChatBox("TheRiddlerChatSystem Message Here", self)
         password_protect_button = QPushButton("Click to Password Protect", self)
         villain_list = VillainList(self)
@@ -68,16 +68,16 @@ class LandingPage(BaseView.BaseView):
         #                                                  go_baby_go)
 
         ####ADD LISTS AS MOCKUP####
-        villain_list.addItem("Silver_Surfer")
-        villain_list.addItem("Mr_Freeze")
-        villain_list.addItem("SaberT00th")
-        villain_list.addItem("RasAlGhul")
-        villain_list.addItem("Venom")
-        villain_list.addItem("Green_Goblin")
-        villain_list.addItem("KingPin")
-        villain_list.addItem("Mr_Smith")
-        villain_list.addItem("General_Zod")
-        villain_list.addItem("DNS_Poisoned_Ivy")
+        villain_list.addItem("ED_NIGMA")
+        villain_list.addItem("HARLEY_QUINN")
+        # villain_list.addItem("SaberT00th")
+        # villain_list.addItem("RasAlGhul")
+        # villain_list.addItem("Venom")
+        # villain_list.addItem("Green_Goblin")
+        # villain_list.addItem("KingPin")
+        # villain_list.addItem("Mr_Smith")
+        # villain_list.addItem("General_Zod")
+        # villain_list.addItem("DNS_Poisoned_Ivy")
 
         fileItems = QDockWidget("Chat Messages", self)
         BuddyList = QDockWidget("Fellow Villians", self)

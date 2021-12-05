@@ -10,9 +10,13 @@ import re
 import socket
 from _thread import start_new_thread
 import random
+from copy import copy
 from threading import Lock
-from typing import ByteString
+from typing import ByteString, Callable
 import colorama as color
+from queue import Queue
+
+from TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
 
 
 class CommandParserAndBuilder:
@@ -101,7 +105,7 @@ class CommandParserAndBuilder:
         return f'EXIT {kwargs["screen_name"]}\n'.encode()
 
 
-class WrappedSocketClient:
+class WrappedSocketClient(MessageRecievedMixIn):
     """
     WrappedSocket aims to take in only the needed parameters and create a TLS protocol SSL wrapped socket using only
     """
@@ -124,10 +128,12 @@ class WrappedSocketClient:
     buddy_list_lock = Lock()
     parse_and_build = CommandParserAndBuilder()
 
-    def __init__(self, nickname: str, ip: str, server_port: int):
+    def __init__(self, nickname: str, ip: str, server_port: int, buffer: Queue = None):
         self.nick = nickname
         self.hostname = ip
         self.port = server_port
+
+        self.buff_queue = buffer
         try:
             self.registration()
         except Exception as e:
@@ -150,6 +156,7 @@ class WrappedSocketClient:
 
         # 2
         self.socket_TCP.send(connection_str)
+        self.response = ""
 
         self.client_Thread_Start()
         try:
@@ -358,17 +365,18 @@ class WrappedSocketClient:
                             if len(kwar.items()) > 0:
                                 self.update_buddy_list(None, **kwar)
 
-                    response = ""
+                    self.response = ""
 
                     if cmd != b'ACPT' and cmd:
-                        response = handle(**arguments)
+                        self.response = handle(**arguments)
 
-                    if response:
+                    if self.response:
                         if handle == self.parse_and_build.parser_mux_recv[b'EXIT']:
                             # special case to remove a buddy from the list
                             self.delete_buddy_from_list(arguments['full_message'])
 
-                        print(response)
+                        print(self.response)
+                        self.buff_queue.put_nowait(copy(self.response))
 
         except KeyboardInterrupt as e:
             do_something = {"screen_name": self.nick}
