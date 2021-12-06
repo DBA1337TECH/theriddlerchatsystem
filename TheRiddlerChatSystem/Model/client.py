@@ -16,6 +16,8 @@ from typing import ByteString, Callable
 import colorama as color
 from queue import Queue
 
+from PyQt5.QtCore import pyqtSlot
+
 from TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
 
 
@@ -68,8 +70,8 @@ class CommandParserAndBuilder:
         message = 'message'
         screen_name = 'screen_name'
         # now go into the builder and build the actual format string
-        message_builder = f"{color.Fore.YELLOW}{kwargs[screen_name].decode()}{color.Fore.RESET}: " \
-                          + f"{color.Back.CYAN}{color.Fore.WHITE}{kwargs[message].decode()}{color.Fore.RESET}{color.Back.RESET}"
+        message_builder = f"{kwargs[screen_name].decode()}: " \
+                          + f"{kwargs[message].decode()}"
         return message_builder
 
     @staticmethod
@@ -128,12 +130,15 @@ class WrappedSocketClient(MessageRecievedMixIn):
     buddy_list_lock = Lock()
     parse_and_build = CommandParserAndBuilder()
 
-    def __init__(self, nickname: str, ip: str, server_port: int, buffer: Queue = None):
+    def __init__(self, nickname: str, ip: str, server_port: int,
+                 buffer: Queue = None, buff_slot: pyqtSlot = None,
+                 send_buffer: Queue = None):
         self.nick = nickname
         self.hostname = ip
         self.port = server_port
 
         self.buff_queue = buffer
+        self.send_queue = send_buffer
         try:
             self.registration()
         except Exception as e:
@@ -159,6 +164,7 @@ class WrappedSocketClient(MessageRecievedMixIn):
         self.response = ""
 
         self.client_Thread_Start()
+        self.received_message = buff_slot
         try:
             while True:
                 pass
@@ -243,7 +249,7 @@ class WrappedSocketClient(MessageRecievedMixIn):
 
     def client_Thread_Send(self, clientSocket: socket = None):
         while True:
-            message = input(f"{color.Fore.CYAN}send{color.Fore.RESET}:>").split(':>')[0]
+            message = f"{self.send_queue.get(True)}"
             try:
                 self.buddy_list_lock.acquire()
                 for screen_name, identity in self.buddy_list.items():
@@ -376,7 +382,9 @@ class WrappedSocketClient(MessageRecievedMixIn):
                             self.delete_buddy_from_list(arguments['full_message'])
 
                         print(self.response)
-                        self.buff_queue.put_nowait(copy(self.response))
+                        cpy = copy(self.response)
+                        self.buff_queue.put_nowait(cpy)
+                        self.received_message.emit(cpy)
 
         except KeyboardInterrupt as e:
             do_something = {"screen_name": self.nick}

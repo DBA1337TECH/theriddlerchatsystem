@@ -68,8 +68,8 @@ class LandingPage(BaseView.BaseView):
         #                                                  go_baby_go)
 
         ####ADD LISTS AS MOCKUP####
-        villain_list.addItem("ED_NIGMA")
-        villain_list.addItem("HARLEY_QUINN")
+        # villain_list.addItem("ED_NIGMA")
+        # villain_list.addItem("HARLEY_QUINN")
         # villain_list.addItem("SaberT00th")
         # villain_list.addItem("RasAlGhul")
         # villain_list.addItem("Venom")
