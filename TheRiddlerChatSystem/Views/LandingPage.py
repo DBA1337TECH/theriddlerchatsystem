@@ -6,7 +6,7 @@ make a view called GameBoard which inherits the BaseView
 
 import sys
 from PyQt5.QtCore import Qt
-#from StenographyController import StenographyController
+# from StenographyController import StenographyController
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
 
@@ -18,6 +18,7 @@ from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
 from TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
 from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
 from TheRiddlerChatSystem.Model.VillainList import VillainList
+from TheRiddlerChatSystem.Views import BaseView
 
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
@@ -52,9 +53,6 @@ class LandingPage(BaseView.BaseView):
         villain_list = VillainList(self)
         go_baby_go = QPushButton("SEND", self)
 
-
-
-
         # format the buttons to look differently
         password_protect_button.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
         villain_list.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
@@ -62,28 +60,11 @@ class LandingPage(BaseView.BaseView):
         receive_chat_box.setStyleSheet(background_role + purple + '; ' + text_role + green + ';')
         go_baby_go.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
 
-        # Create and Attach Controllers
-        # noinspection PyAttributeOutsideInit
-        #self.hiddenImageController = StenographyController(self, receive_chat_box, message_chat_box, password_protect_button,
-        #                                                  go_baby_go)
-
-        ####ADD LISTS AS MOCKUP####
-        # villain_list.addItem("ED_NIGMA")
-        # villain_list.addItem("HARLEY_QUINN")
-        # villain_list.addItem("SaberT00th")
-        # villain_list.addItem("RasAlGhul")
-        # villain_list.addItem("Venom")
-        # villain_list.addItem("Green_Goblin")
-        # villain_list.addItem("KingPin")
-        # villain_list.addItem("Mr_Smith")
-        # villain_list.addItem("General_Zod")
-        # villain_list.addItem("DNS_Poisoned_Ivy")
-
         fileItems = QDockWidget("Chat Messages", self)
         BuddyList = QDockWidget("Fellow Villians", self)
         fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
         folderItems = QDockWidget("Type a Message to be sent", self)
-        viewOne = QPixmap(os.getcwd() + '/images/1337_Logo_small.png')
+        viewOne = QPixmap(os.getcwd() + '/images/Beret_blue_mini.png')
 
         # Adjust the Font
         options_font = QFont('Courier', 14, QFont.ExtraBold)
@@ -115,7 +96,6 @@ class LandingPage(BaseView.BaseView):
         logo = QLabel()
         logo.setPixmap(self.p2)
 
-
         top_left = QFrame(splitter1)
         top_left.setFrameShape(QFrame.StyledPanel)
 
@@ -127,7 +107,6 @@ class LandingPage(BaseView.BaseView):
         splitter1.addWidget(BuddyList)
         splitter1.addWidget(villain_list)
         splitter1.addWidget(logo)
-
 
         splitter2.setSizePolicy(sizePolicy)
         splitter2.setOrientation(Qt.Vertical)

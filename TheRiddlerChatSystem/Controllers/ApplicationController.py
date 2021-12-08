@@ -37,7 +37,6 @@ class ApplicationController(BaseController.BaseController ):
         self.send_queue = queue.Queue()
 
         self.courier = WrappedSocketClient
-        # self.send_button.SendButton.clicked.connect(self.receive_and_print)
         self.app_obj = RecvObject()
         self.app_obj.buff_slot.connect(self.receive_and_print)
         self.send_button.SendButton.clicked.connect(self.send_message)
