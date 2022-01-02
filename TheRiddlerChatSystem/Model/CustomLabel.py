@@ -11,12 +11,13 @@ import sys
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
+
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import os
 import math
-import BaseView
+from TheRiddlerChatSystem.Views.BaseView import BaseView
 
 me = '[CustomLabel]'
 
@@ -218,6 +219,7 @@ class LoadingLabel(QLabel):
 
     def mousePressEvent(self, ev):
         self.clicked.emit()
+
 
 class LogoLabel(QLabel):
     clicked = pyqtSignal()

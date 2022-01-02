@@ -4,11 +4,9 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
 
-import sys, os
-from PyQt5.QtWidgets import  *
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
+import sys
 
+from PyQt5.QtWidgets import *
 
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')

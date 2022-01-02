@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMouseEvent
-from PyQt5.QtWidgets import QTextEdit, QListWidget
+from PyQt5.QtWidgets import QListWidget
 
 from TheRiddlerChatSystem.Model.Clickable import ClickMixIn
 
