@@ -10,9 +10,15 @@ import re
 import socket
 from _thread import start_new_thread
 import random
+from copy import copy
 from threading import Lock
-from typing import ByteString
+from typing import ByteString, Callable
 import colorama as color
+from queue import Queue
+
+from PyQt5.QtCore import pyqtSlot
+
+from TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
 
 
 class CommandParserAndBuilder:
@@ -64,8 +70,8 @@ class CommandParserAndBuilder:
         message = 'message'
         screen_name = 'screen_name'
         # now go into the builder and build the actual format string
-        message_builder = f"{color.Fore.YELLOW}{kwargs[screen_name].decode()}{color.Fore.RESET}: " \
-                          + f"{color.Back.CYAN}{color.Fore.WHITE}{kwargs[message].decode()}{color.Fore.RESET}{color.Back.RESET}"
+        message_builder = f"{kwargs[screen_name].decode()}: " \
+                          + f"{kwargs[message].decode()}"
         return message_builder
 
     @staticmethod
@@ -101,7 +107,7 @@ class CommandParserAndBuilder:
         return f'EXIT {kwargs["screen_name"]}\n'.encode()
 
 
-class WrappedSocketClient:
+class WrappedSocketClient(MessageRecievedMixIn):
     """
     WrappedSocket aims to take in only the needed parameters and create a TLS protocol SSL wrapped socket using only
     """
@@ -124,10 +130,15 @@ class WrappedSocketClient:
     buddy_list_lock = Lock()
     parse_and_build = CommandParserAndBuilder()
 
-    def __init__(self, nickname: str, ip: str, server_port: int):
+    def __init__(self, nickname: str, ip: str, server_port: int,
+                 buffer: Queue = None, buff_slot: pyqtSlot = None,
+                 send_buffer: Queue = None):
         self.nick = nickname
         self.hostname = ip
         self.port = server_port
+
+        self.buff_queue = buffer
+        self.send_queue = send_buffer
         try:
             self.registration()
         except Exception as e:
@@ -150,8 +161,10 @@ class WrappedSocketClient:
 
         # 2
         self.socket_TCP.send(connection_str)
+        self.response = ""
 
         self.client_Thread_Start()
+        self.received_message = buff_slot
         try:
             while True:
                 pass
@@ -220,7 +233,7 @@ class WrappedSocketClient:
                     full_command.pop().decode() # discard the cmd we assume it is b'EXIT <screenname>'
                     screen_name = full_command.pop().decode()
                     if self.buddy_list.get(screen_name):
-                        print(f"{color.Fore.RED}{screen_name} has been deleted from the list{color.Fore.RESET}")
+                        # print(f"{color.Fore.RED}{screen_name} has been deleted from the list{color.Fore.RESET}")
                         self.buddy_list.pop(screen_name)
                 finally:
                     pass
@@ -236,7 +249,7 @@ class WrappedSocketClient:
 
     def client_Thread_Send(self, clientSocket: socket = None):
         while True:
-            message = input(f"{color.Fore.CYAN}send{color.Fore.RESET}:>").split(':>')[0]
+            message = f"{self.send_queue.get(True)}"
             try:
                 self.buddy_list_lock.acquire()
                 for screen_name, identity in self.buddy_list.items():
@@ -276,15 +289,12 @@ class WrappedSocketClient:
                             for key in keyword_args:
                                 arguments[key] = full_command.pop()
                         else:
-                            # full_command.reverse()
-                            print(full_command)
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()
                                 ip = full_command.pop().decode()
                                 port = int(str(full_command.pop().decode()))
                                 kwar[screen_name] = (ip, port)
-                                print(f"port: {port}")
                             if len(kwar.items()) > 0:
                                 self.update_buddy_list(None, **kwar)
 
@@ -318,9 +328,8 @@ class WrappedSocketClient:
 
                 elif self.commands_recv[b'ACPT'] in full_command:
                     full_command = re.sub(b'\n', b'', full_command)
-                    print(full_command)
                     full_command.replace(b'ACPT ', b'')
-                    # full_command = b':'.join(full_command)
+
                     parse_full_command = full_command.split(b':')
                     if len(parse_full_command) == 1:
                         parse_full_command = full_command.split(b' ')
@@ -337,7 +346,7 @@ class WrappedSocketClient:
                 else:
                     full_command = (re.sub(b'\n', b'', full_command)).split(b' ')
                     full_command.reverse()
-                    print(f'full command: {full_command}')
+
                     # a part of parsing make sure it's a valid command before we parse
                     handle = self.parse_and_build.parser_mux_recv[full_command[-1]]
 
@@ -346,17 +355,12 @@ class WrappedSocketClient:
                     arguments = {}
                     cpy_command = full_command.copy()
                     cmd = full_command.pop()
-                    print(cmd)
                     while len(full_command) >= 1:
                         if cmd != b'ACPT':
                             for key in keyword_args:
-                                print(key)
-                                print(full_command)
                                 arguments[key] = full_command.pop()
                             arguments['full_message'] = cpy_command
                         else:
-                            # full_command.reverse()
-                            print(f"ACPT: {full_command}")
                             kwar = {}
                             while len(full_command) > 0:
                                 screen_name = full_command.pop().decode()
@@ -367,17 +371,20 @@ class WrappedSocketClient:
                             if len(kwar.items()) > 0:
                                 self.update_buddy_list(None, **kwar)
 
-                    response = ""
+                    self.response = ""
 
                     if cmd != b'ACPT' and cmd:
-                        response = handle(**arguments)
+                        self.response = handle(**arguments)
 
-                    if response:
+                    if self.response:
                         if handle == self.parse_and_build.parser_mux_recv[b'EXIT']:
                             # special case to remove a buddy from the list
                             self.delete_buddy_from_list(arguments['full_message'])
 
-                        print(response)
+                        print(self.response)
+                        cpy = copy(self.response)
+                        self.buff_queue.put_nowait(cpy)
+                        self.received_message.emit(cpy)
 
         except KeyboardInterrupt as e:
             do_something = {"screen_name": self.nick}
