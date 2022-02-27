@@ -2,6 +2,7 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
+from typing import Any
 
 '''
  ____________ _________________  ___________           .__
@@ -40,6 +41,10 @@ sys.path.insert(2, '../Views')
 import Constants
 
 gknot = 3
+
+
+def del_users_RAM(obj: Any):
+    del obj
 
 
 class FileInterface:
@@ -173,6 +178,9 @@ class ZeroKnowledgeAuthServer():
         self.z = z
         self.u = username
         self.Y = self.LookupPublicKey(self.u)
+
+        if isinstance(self.Y, type(None)):
+            return False
         t1 = natural_modexp((natural_modexp(self.Y, self.c, self.p) * natural_modexp(gknot, self.z, self.p)), 1, self.p)
         digest = int.from_bytes(self.crypt.Sha256(str(self.Y).encode() + str(t1).encode() + str(self.a).encode()),
                                 byteorder='little')
@@ -196,11 +204,18 @@ class ZeroKnowledgeAuthServer():
         usersFile = FileInterface(os.getcwd().replace('Views', 'Model') + Constants.USERS_FILE)
         jsonUsers = usersFile.ReadFile()
         jsonimage = json.loads(jsonUsers)
-        Y = jsonimage[u]
-        del jsonUsers
-        del jsonimage
+        y = None
+        try:
+            y = jsonimage[u]
+            del_users_RAM(jsonUsers)
+            del_users_RAM(jsonimage)
+        except KeyError:
+            print(f"There is no user {str(u)}")
+            del_users_RAM(jsonUsers)
+            del_users_RAM(jsonimage)
+
         usersFile.CloseFile()
-        return Y
+        return y
 
 
 def modexp(x, y, n):
@@ -394,232 +409,6 @@ class ExtendedGCD():
             self._quotient = s, t
 
             self.computed = True
-
-
-# class CommitmentScheme(object):
-#     def __init__(self, oneWayPermutation, hardcorePredicate, securityParameter):
-#         '''
-#             oneWayPermutation: int -> int
-#             hardcorePredicate: int -> {0, 1}
-#         '''
-#         self.oneWayPermutation = oneWayPermutation
-#         self.hardcorePredicate = hardcorePredicate
-#         self.securityParameter = securityParameter
-#
-#         # a random string of length `self.securityParameter` used only once per commitment
-#         self.secret = self.generateSecret()
-#
-#     def generateSecret(self):
-#         raise NotImplemented
-#
-#     def commit(self, x):
-#         raise NotImplemented
-#
-#     def reveal(self):
-#         return self.secret
-#
-# def goodPrime(p):
-#     return p % 4 == 3 and probablyPrime(p, accuracy=100)
-#
-# def findGoodPrime(numBits=512):
-#     candidate = 1
-#
-#     while not goodPrime(candidate):
-#         candidate = random.getrandbits(numBits)
-#
-#     return candidate
-#
-# def makeModulus(numBits=512):
-#     return findGoodPrime(numBits) * findGoodPrime(numBits)
-#
-# def blum_blum_shub(modulusLength=512):
-#     modulus = makeModulus(numBits=modulusLength)
-#
-#     def f(inputInt):
-#         return pow(inputInt, 2, modulus)
-#
-#     return f
-#
-# def parity(n):
-#     return sum(int(x) for x in bin(n)[2:]) % 2
-#
-# class BBSBitCommitmentScheme(CommitmentScheme):
-#     def generateSecret(self):
-#         # the secret is a random quadratic residue
-#         self.secret = self.oneWayPermutation(random.getrandbits(self.securityParameter))
-#         return self.secret
-#
-#     def commit(self, bit):
-#         unguessableBit = self.hardcorePredicate(self.secret)
-#         return (
-#             self.oneWayPermutation(self.secret),
-#             unguessableBit ^ bit,  # python xor
-#         )
-#
-# class BBSBitCommitmentVerifier(object):
-#     def __init__(self, oneWayPermutation, hardcorePredicate):
-#         self.oneWayPermutation = oneWayPermutation
-#         self.hardcorePredicate = hardcorePredicate
-#
-#     def verify(self, securityString, claimedCommitment):
-#         trueBit = self.decode(securityString, claimedCommitment)
-#         unguessableBit = self.hardcorePredicate(securityString)  # wasteful, whatever
-#         return claimedCommitment == (
-#             self.oneWayPermutation(securityString),
-#             unguessableBit ^ trueBit,  # python xor
-#         )
-#
-#     def decode(self, securityString, claimedCommitment):
-#         unguessableBit = self.hardcorePredicate(securityString)
-#         return claimedCommitment[1] ^ unguessableBit
-#
-#
-# class Verifier(object):
-#     def __init__(self, graph, oneWayPermutation, hardcorePredicate):
-#         self.graph = [tuple(sorted(e)) for e in graph]
-#         self.oneWayPermutation = oneWayPermutation
-#         self.hardcorePredicate = hardcorePredicate
-#         self.committedColoring = None
-#         self.verifier = commitment.BBSIntCommitmentVerifier(2, oneWayPermutation, hardcorePredicate)
-#
-#     def chooseEdge(self, committedColoring):
-#         self.committedColoring = committedColoring
-#         self.chosenEdge = random.choice(self.graph)
-#         return self.chosenEdge
-#
-#     def accepts(self, revealed):
-#         revealedColors = []
-#
-#         for (w, bitSecrets) in zip(self.chosenEdge, revealed):
-#             trueColor = self.verifier.decode(bitSecrets, self.committedColoring[w])
-#             revealedColors.append(trueColor)
-#             if not self.verifier.verify(bitSecrets, self.committedColoring[w]):
-#                 return False
-#
-#         return revealedColors[0] != revealedColors[1]
-#
-# class BBSIntCommitmentScheme(CommitmentScheme):
-#     def __init__(self, numBits, oneWayPermutation, hardcorePredicate, securityParameter=512):
-#         '''
-#             A commitment scheme for integers of a prespecified length `numBits`. Applies the
-#             Blum-Blum-Shub bit commitment scheme to each bit independently.
-#         '''
-#         self.schemes = [BBSBitCommitmentScheme(oneWayPermutation, hardcorePredicate, securityParameter)
-#                         for _ in range(numBits)]
-#         super().__init__(oneWayPermutation, hardcorePredicate, securityParameter)
-#
-#     def generateSecret(self):
-#         self.secret = [x.secret for x in self.schemes]
-#         return self.secret
-#
-#     def commit(self, integer):
-#         # first pad bits to desired length
-#         integer = bin(integer)[2:].zfill(len(self.schemes))
-#         bits = [int(bit) for bit in integer]
-#         return [scheme.commit(bit) for scheme, bit in zip(self.schemes, bits)]
-#
-# class BBSIntCommitmentVerifier(object):
-#     def __init__(self, numBits, oneWayPermutation, hardcorePredicate):
-#         self.verifiers = [BBSBitCommitmentVerifier(oneWayPermutation, hardcorePredicate)
-#                           for _ in range(numBits)]
-#
-#     def decodeBits(self, secrets, bitCommitments):
-#         return [v.decode(secret, commitment) for (v, secret, commitment) in
-#                 zip(self.verifiers, secrets, bitCommitments)]
-#
-#     def verify(self, secrets, bitCommitments):
-#         return all(
-#             bitVerifier.verify(secret, commitment)
-#             for (bitVerifier, secret, commitment) in
-#             zip(self.verifiers, secrets, bitCommitments)
-#         )
-#
-#     def decode(self, secrets, bitCommitments):
-#         decodedBits = self.decodeBits(secrets, bitCommitments)
-#         return int(''.join(str(bit) for bit in decodedBits))
-#
-# class Prover(object):
-#     def __init__(self, graph, coloring, oneWayPermutation=ONE_WAY_PERMUTATION, hardcorePredicate=HARDCORE_PREDICATE):
-#         self.graph = [tuple(sorted(e)) for e in graph]
-#         self.coloring = coloring
-#         self.vertices = list(range(1, numVertices(graph) + 1))
-#         self.oneWayPermutation = oneWayPermutation
-#         self.hardcorePredicate = hardcorePredicate
-#         self.vertexToScheme = None
-#
-#     def commitToColoring(self):
-#         self.vertexToScheme = {
-#             v: commitment.BBSIntCommitmentScheme(
-#                 2, self.oneWayPermutation, self.hardcorePredicate
-#             ) for v in self.vertices
-#         }
-#
-#         permutation = randomPermutation(3)
-#         permutedColoring = {
-#             v: permutation[self.coloring[v]] for v in self.vertices
-#         }
-#
-#         return {v: s.commit(permutedColoring[v])
-#                 for (v, s) in self.vertexToScheme.items()}
-#
-#     def revealColors(self, u, v):
-#         u, v = min(u, v), max(u, v)
-#         if not (u, v) in self.graph:
-#             raise Exception('Must query an edge!')
-#
-#         return (
-#             self.vertexToScheme[u].reveal(),
-#             self.vertexToScheme[v].reveal(),
-#         )
-#
-#
-# class Verifier(object):
-#     def __init__(self, graph, oneWayPermutation, hardcorePredicate):
-#         self.graph = [tuple(sorted(e)) for e in graph]
-#         self.oneWayPermutation = oneWayPermutation
-#         self.hardcorePredicate = hardcorePredicate
-#         self.committedColoring = None
-#         self.verifier = commitment.BBSIntCommitmentVerifier(2, oneWayPermutation, hardcorePredicate)
-#
-#     def chooseEdge(self, committedColoring):
-#         self.committedColoring = committedColoring
-#         self.chosenEdge = random.choice(self.graph)
-#         return self.chosenEdge
-#
-#     def accepts(self, revealed):
-#         revealedColors = []
-#
-#         for (w, bitSecrets) in zip(self.chosenEdge, revealed):
-#             trueColor = self.verifier.decode(bitSecrets, self.committedColoring[w])
-#             revealedColors.append(trueColor)
-#             if not self.verifier.verify(bitSecrets, self.committedColoring[w]):
-#                 return False
-#
-#         return revealedColors[0] != revealedColors[1]
-#
-#
-# def runProtocol(G, coloring, securityParameter=512):
-#     oneWayPermutation = blum_blum_shub.blum_blum_shub(securityParameter)
-#     hardcorePredicate = blum_blum_shub.parity
-#
-#     prover = Prover(G, coloring, oneWayPermutation, hardcorePredicate)
-#     verifier = Verifier(G, oneWayPermutation, hardcorePredicate)
-#
-#     committedColoring = prover.commitToColoring()
-#     chosenEdge = verifier.chooseEdge(committedColoring)
-#
-#     revealed = prover.revealColors(*chosenEdge)
-#     revealedColors = (
-#         verifier.verifier.decode(revealed[0], committedColoring[chosenEdge[0]]),
-#         verifier.verifier.decode(revealed[1], committedColoring[chosenEdge[1]]),
-#     )
-#     isValid = verifier.accepts(revealed)
-#
-#     print("{} != {} and commitment is valid? {}".format(
-#         revealedColors[0], revealedColors[1], isValid
-#     ))
-#
-#     return isValid
 
 
 if __name__ == "__main__":
