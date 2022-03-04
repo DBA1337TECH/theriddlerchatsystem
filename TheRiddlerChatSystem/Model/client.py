@@ -1,9 +1,9 @@
 """
-Author: Blake D. De Garza
-UTEID: bd6225
-DATE: 01/16/2021
-DUE: 02/14/2021 at 11:59pm
-Object Oriented client, Project 1
+The Riddler Chat System
+
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Client.py for Riddler Chat System
 """
 import argparse
 import re

@@ -440,21 +440,3 @@ if __name__ == "__main__":
     client = ZeroKnowledgeAuthClient('cheaner', crypt.Sha256(str('thisIsNotThePasswordYouAreLookingFor').encode()), a)
     didweAuth = server.Authenticate(username, client.c, client.zx)
     print("Did we Authenticate: " + str(didweAuth))
-
-    # import blum_blum_shub
-    # securityParameter = 10
-    # oneWayPerm = blum_blum_shub.blum_blum_shub(securityParameter)
-    # hardcorePred = blum_blum_shub.parity
-    #
-    # print('Int commitment')
-    # scheme = BBSIntCommitmentScheme(10, oneWayPerm, hardcorePred)
-    # verifier = BBSIntCommitmentVerifier(10, oneWayPerm, hardcorePred)
-    # choices = list(range(1024))
-    # for _ in range(10):
-    #     theInt = random.choice(choices)
-    #     commitments = scheme.commit(theInt)
-    #     secrets = scheme.reveal()
-    #     trueInt = verifier.decode(secrets, commitments)
-    #     valid = verifier.verify(secrets, commitments)
-    #
-    #     print('{} == {}? {}; {} {}'.format(theInt, trueInt, valid, secrets, commitments))
