@@ -64,7 +64,7 @@ class LandingPage(BaseView.BaseView):
         BuddyList = QDockWidget("Fellow Villians", self)
         fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
         folderItems = QDockWidget("Type a Message to be sent", self)
-        viewOne = QPixmap(os.getcwd() + '/images/Beret_blue_mini.png')
+        viewOne = QPixmap(os.getcwd() + '/images/riddler_logo.jpg')
 
         # Adjust the Font
         options_font = QFont('Courier', 14, QFont.ExtraBold)
