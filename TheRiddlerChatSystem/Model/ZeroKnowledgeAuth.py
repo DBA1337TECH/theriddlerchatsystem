@@ -25,7 +25,7 @@ sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
 
-from TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
 import secrets
 import json
 # import FileInterface
@@ -38,7 +38,7 @@ import struct
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
-import Constants
+from chatclient.TheRiddlerChatSystem.Model import Constants
 
 gknot = 3
 

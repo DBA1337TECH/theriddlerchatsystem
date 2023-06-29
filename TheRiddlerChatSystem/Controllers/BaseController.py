@@ -1,6 +1,6 @@
 # /usr/env/python3.7
 
-from TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Views import BaseView
 
 me = '[BaseController]'
 

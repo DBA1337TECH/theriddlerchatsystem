@@ -1,11 +1,11 @@
 from PyQt5.QtCore import pyqtSlot, pyqtSignal, QObject
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Controllers.MessageController import MessageController
-from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
-from TheRiddlerChatSystem.Controllers.VillainController import VillainController
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Controllers.MessageController import MessageController
+from chatclient.TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
+from chatclient.TheRiddlerChatSystem.Controllers.VillainController import VillainController
 
-from TheRiddlerChatSystem.Model.client import WrappedSocketClient
+from chatclient.TheRiddlerChatSystem.Model.client import WrappedSocketClient
 
 from threading import Thread
 import queue

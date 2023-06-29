@@ -3,8 +3,8 @@
 import os
 
 from PyQt5.QtGui import QPixmap
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.Clickable import clickable
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Model.Clickable import clickable
 
 me = '[ButtonController]'
 

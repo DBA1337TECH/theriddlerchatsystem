@@ -7,7 +7,7 @@ import sys
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
-import CryptoTools
+import chatclient.TheRiddlerChatSystem.Model.cryptoutils
 import secrets
 
 sys.path.insert(0, '../Controllers')

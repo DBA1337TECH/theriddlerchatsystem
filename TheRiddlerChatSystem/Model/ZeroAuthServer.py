@@ -9,11 +9,11 @@ from typing import Any
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
 sys.path.insert(2, '../Views')
-from TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
 import secrets
 import json
-import FileInterface
-from TheRiddlerChatSystem.Model import Constants
+import chatclient.FileInterface
+from chatclient.TheRiddlerChatSystem.Model import Constants
 
 from ExpMath import *
 

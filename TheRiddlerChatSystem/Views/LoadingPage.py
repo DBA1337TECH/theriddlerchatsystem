@@ -2,7 +2,7 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
-from TheRiddlerChatSystem.Views.AuthenticationView import AuthenticateView
+from .AuthenticationView import AuthenticateView
 
 '''
 Although it is titled the Landing page it is being treated more like the initial
@@ -12,16 +12,16 @@ always make a view called GameBoard (as an example) which inherits the BaseView
 
 from PyQt5.QtCore import Qt
 
-from TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
-from TheRiddlerChatSystem.Model.CustomLabel import *
-from TheRiddlerChatSystem.Model.Overlay import Overlay
-from TheRiddlerChatSystem.Views.BaseView import BaseView
-from TheRiddlerChatSystem.Views.MainWindow import MainWindow
+from chatclient.TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
+from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Model.Overlay import Overlay
+from chatclient.TheRiddlerChatSystem.Views.BaseView import BaseView
+# from TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 
 class LoadingPage(BaseView):
 
-    def __init__(self, window: MainWindow = None):
+    def __init__(self, window= None):
         super(LoadingPage, self).__init__()
         self.ctrl = None
         self.components = []

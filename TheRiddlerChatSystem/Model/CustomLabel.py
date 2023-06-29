@@ -17,7 +17,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import os
 import math
-from TheRiddlerChatSystem.Views.BaseView import BaseView
+from chatclient.TheRiddlerChatSystem.Views.BaseView import BaseView
 
 me = '[CustomLabel]'
 

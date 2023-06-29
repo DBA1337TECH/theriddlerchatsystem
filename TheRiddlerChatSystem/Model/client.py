@@ -18,7 +18,7 @@ from queue import Queue
 
 from PyQt5.QtCore import pyqtSlot
 
-from TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
+from chatclient.TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
 
 
 class CommandParserAndBuilder:

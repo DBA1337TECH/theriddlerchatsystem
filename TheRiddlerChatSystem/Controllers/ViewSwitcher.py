@@ -3,11 +3,11 @@ DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
-from TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
-from TheRiddlerChatSystem.Views import BaseView
-from TheRiddlerChatSystem.Views import LandingPage
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+from chatclient.TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+from chatclient.TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Views import LandingPage
 
 
 class ViewSwitcher(BaseController.BaseController):

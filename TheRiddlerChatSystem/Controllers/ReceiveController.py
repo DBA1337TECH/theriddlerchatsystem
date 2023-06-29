@@ -4,8 +4,8 @@ import os
 
 from PyQt5.QtWidgets import QTextEdit
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
 
 me = '[ReceiveController]'
 

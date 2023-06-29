@@ -10,15 +10,15 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
 
-from TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
-from TheRiddlerChatSystem.Controllers.MessageController import MessageController
-from TheRiddlerChatSystem.Controllers.VillainController import VillainController
-from TheRiddlerChatSystem.Model.CustomLabel import *
-from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
-from TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
-from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
-from TheRiddlerChatSystem.Model.VillainList import VillainList
-from TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
+from chatclient.TheRiddlerChatSystem.Controllers.MessageController import MessageController
+from chatclient.TheRiddlerChatSystem.Controllers.VillainController import VillainController
+from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
+from chatclient.TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
+from chatclient.TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
+from chatclient.TheRiddlerChatSystem.Model.VillainList import VillainList
+from chatclient.TheRiddlerChatSystem.Views import BaseView
 
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')

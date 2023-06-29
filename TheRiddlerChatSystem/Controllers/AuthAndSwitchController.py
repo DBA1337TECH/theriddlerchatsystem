@@ -1,8 +1,8 @@
 from PyQt5.QtCore import Qt
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Controllers.AuthController import AuthController
-from TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Controllers.AuthController import AuthController
+from chatclient.TheRiddlerChatSystem.Views import BaseView
 
 
 class AuthAndSwitchController(BaseController.BaseController):

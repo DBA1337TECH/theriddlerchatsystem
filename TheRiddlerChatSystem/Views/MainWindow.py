@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtGui import QIcon, QPainter, QPen
 from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect, QDesktopWidget
 
-from TheRiddlerChatSystem.Views import LoadingPage
+from chatclient.TheRiddlerChatSystem.Views import LoadingPage
 
 me = '[MainWindow]'
 

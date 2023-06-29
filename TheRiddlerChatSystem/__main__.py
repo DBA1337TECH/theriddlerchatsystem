@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication
-from TheRiddlerChatSystem.Views import MainWindow
 import sys
+from chatclient.TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

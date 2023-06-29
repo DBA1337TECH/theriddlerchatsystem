@@ -6,11 +6,11 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 import sys, os
 from typing import Any
 
-from TheRiddlerChatSystem.Model import cryptoutils
-from TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+from chatclient.TheRiddlerChatSystem.Model import cryptoutils
+from chatclient.TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
 
-from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Controllers import BaseController
+from chatclient.TheRiddlerChatSystem.Views import BaseView
 
 
 class AuthController(BaseController.BaseController):

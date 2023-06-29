@@ -2,10 +2,10 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
-from TheRiddlerChatSystem.Controllers.AuthAndSwitchController import AuthAndSwitchController
-from TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
-from TheRiddlerChatSystem.Views.LandingPage import LandingPage
-from TheRiddlerChatSystem.Views.MainWindow import MainWindow
+from chatclient.TheRiddlerChatSystem.Controllers.AuthAndSwitchController import AuthAndSwitchController
+from chatclient.TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
+from chatclient.TheRiddlerChatSystem.Views.LandingPage import LandingPage
+# from chatclient.TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 '''
 Although it is titled the Landing page it is being treated more like the initial
@@ -15,14 +15,14 @@ always make a view called GameBoard (as an example) which inherits the BaseView
 
 from PyQt5.QtCore import Qt
 
-from TheRiddlerChatSystem.Model.TextBoxes import SecretTextBox
+from chatclient.TheRiddlerChatSystem.Model.TextBoxes import SecretTextBox
 
-from TheRiddlerChatSystem.Model.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
 
 
 class AuthenticateView(BaseView):
 
-    def __init__(self, window: MainWindow = None):
+    def __init__(self, window=None):
         super(AuthenticateView, self).__init__()
         self.ctrl = None
         self.components = []
