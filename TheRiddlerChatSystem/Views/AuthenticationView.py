@@ -15,9 +15,9 @@ always make a view called GameBoard (as an example) which inherits the BaseView
 
 from PyQt5.QtCore import Qt
 
-from chatclient.TheRiddlerChatSystem.Model.TextBoxes import SecretTextBox
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.TextBoxes import SecretTextBox
 
-from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.CustomLabel import *
 
 
 class AuthenticateView(BaseView):

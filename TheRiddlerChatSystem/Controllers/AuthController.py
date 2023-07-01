@@ -3,11 +3,8 @@ DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
-import sys, os
-from typing import Any
-
-from chatclient.TheRiddlerChatSystem.Model import cryptoutils
-from chatclient.TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto import cryptoutils
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto.zka.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
 
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
 from chatclient.TheRiddlerChatSystem.Views import BaseView

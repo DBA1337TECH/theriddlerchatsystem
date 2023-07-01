@@ -8,9 +8,9 @@ CustomLabelType
 '''
 import sys
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../Controllers')
+sys.path.insert(1, '..')
+sys.path.insert(2, '../../Views')
 
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *

@@ -4,20 +4,19 @@ GameBoard.  Luckily this is just a view so it is subject to change, I can always
 make a view called GameBoard which inherits the BaseView
 '''
 
-import sys
 from PyQt5.QtCore import Qt
 # from StenographyController import StenographyController
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
+from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton
 
 from chatclient.TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
 from chatclient.TheRiddlerChatSystem.Controllers.MessageController import MessageController
 from chatclient.TheRiddlerChatSystem.Controllers.VillainController import VillainController
-from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.CustomLabel import *
 from chatclient.TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
-from chatclient.TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
-from chatclient.TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
-from chatclient.TheRiddlerChatSystem.Model.VillainList import VillainList
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.MsgChatBox import MsgChatBox
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.RecvChatBox import RecvChatBox
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.VillainList import VillainList
 from chatclient.TheRiddlerChatSystem.Views import BaseView
 
 sys.path.insert(0, '../Controllers')

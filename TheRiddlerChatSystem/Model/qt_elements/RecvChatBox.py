@@ -4,11 +4,11 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QMouseEvent
 from PyQt5.QtWidgets import QListWidget
 
-from chatclient.TheRiddlerChatSystem.Model.Clickable import ClickMixIn
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.Clickable import ClickMixIn
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../Controllers')
+sys.path.insert(1, '..')
+sys.path.insert(2, '../../Views')
 
 
 class RecvChatBox(ClickMixIn, QListWidget):

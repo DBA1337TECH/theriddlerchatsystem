@@ -21,23 +21,21 @@ only a token Alpha.
 import os
 import sys
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../../../Controllers')
+sys.path.insert(1, '../../..')
+sys.path.insert(2, '../../../../Views')
 
-from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto.cryptoutils import CryptoTools
 import secrets
 import json
 # import FileInterface
 
-import Crypto.Util.number
 # import numba
 # import numpy as np
-import struct
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../../../Controllers')
+sys.path.insert(1, '../../..')
+sys.path.insert(2, '../../../../Views')
 from chatclient.TheRiddlerChatSystem.Model import Constants
 
 gknot = 3
@@ -421,7 +419,6 @@ if __name__ == "__main__":
     print(logo)
     print("\n\n")
     print("Beginning Registration")
-    import Crypto.Util.number
 
     gknot = 3
 

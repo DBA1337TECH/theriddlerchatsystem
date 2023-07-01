@@ -12,13 +12,13 @@ from _thread import start_new_thread
 import random
 from copy import copy
 from threading import Lock
-from typing import ByteString, Callable
+from typing import ByteString
 import colorama as color
 from queue import Queue
 
 from PyQt5.QtCore import pyqtSlot
 
-from chatclient.TheRiddlerChatSystem.Model.Clickable import MessageRecievedMixIn
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.Clickable import MessageRecievedMixIn
 
 
 class CommandParserAndBuilder:

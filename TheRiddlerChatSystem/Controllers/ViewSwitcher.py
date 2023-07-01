@@ -4,8 +4,8 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
-from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
-from chatclient.TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto.cryptoutils import CryptoTools
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto.zka.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
 from chatclient.TheRiddlerChatSystem.Views import BaseView
 from chatclient.TheRiddlerChatSystem.Views import LandingPage
 

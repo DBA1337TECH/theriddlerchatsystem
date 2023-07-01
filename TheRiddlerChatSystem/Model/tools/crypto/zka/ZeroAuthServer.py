@@ -6,13 +6,12 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 import sys
 from typing import Any
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
-from chatclient.TheRiddlerChatSystem.Model.cryptoutils import CryptoTools
+sys.path.insert(0, '../../../../Controllers')
+sys.path.insert(1, '../../..')
+sys.path.insert(2, '../../../../Views')
+from chatclient.TheRiddlerChatSystem.Model.tools.crypto.cryptoutils import CryptoTools
 import secrets
 import json
-import chatclient.FileInterface
 from chatclient.TheRiddlerChatSystem.Model import Constants
 
 from ExpMath import *

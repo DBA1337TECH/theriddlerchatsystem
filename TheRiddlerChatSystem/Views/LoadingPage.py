@@ -13,8 +13,8 @@ always make a view called GameBoard (as an example) which inherits the BaseView
 from PyQt5.QtCore import Qt
 
 from chatclient.TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
-from chatclient.TheRiddlerChatSystem.Model.CustomLabel import *
-from chatclient.TheRiddlerChatSystem.Model.Overlay import Overlay
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.CustomLabel import *
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.Overlay import Overlay
 from chatclient.TheRiddlerChatSystem.Views.BaseView import BaseView
 # from TheRiddlerChatSystem.Views.MainWindow import MainWindow
 

@@ -1,11 +1,9 @@
 # /usr/env/python3.7
 
-import os
-
-from PyQt5.QtWidgets import QTextEdit, QPushButton
+from PyQt5.QtWidgets import QPushButton
 
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
-from chatclient.TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.RecvChatBox import RecvChatBox
 
 me = '[MessageController]'
 

@@ -8,9 +8,9 @@ import sys
 
 from PyQt5.QtWidgets import *
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../Controllers')
+sys.path.insert(1, '..')
+sys.path.insert(2, '../../Views')
 
 me = '[ProgressBarCustom]'
 

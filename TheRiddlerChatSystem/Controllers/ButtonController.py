@@ -1,10 +1,7 @@
 # /usr/env/python3.7
 
-import os
-
-from PyQt5.QtGui import QPixmap
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
-from chatclient.TheRiddlerChatSystem.Model.Clickable import clickable
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.Clickable import clickable
 
 me = '[ButtonController]'
 

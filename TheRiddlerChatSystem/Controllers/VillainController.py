@@ -1,6 +1,5 @@
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
-from chatclient.TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
-from chatclient.TheRiddlerChatSystem.Model.VillainList import VillainList
+from chatclient.TheRiddlerChatSystem.Model.qt_elements.VillainList import VillainList
 
 me = '[VillainController]'
 

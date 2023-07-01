@@ -4,15 +4,14 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 
 import sys
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
-import chatclient.TheRiddlerChatSystem.Model.cryptoutils
+sys.path.insert(0, '../../../../Controllers')
+sys.path.insert(1, '../../..')
+sys.path.insert(2, '../../../../Views')
 import secrets
 
-sys.path.insert(0, '../Controllers')
-sys.path.insert(1, '../Model')
-sys.path.insert(2, '../Views')
+sys.path.insert(0, '../../../../Controllers')
+sys.path.insert(1, '../../..')
+sys.path.insert(2, '../../../../Views')
 from ExpMath import *
 gknot = 3
 p = 4074071952668972172536891376818756322102936787331872501272280898708762599526673412366794779
