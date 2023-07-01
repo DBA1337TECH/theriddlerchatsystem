@@ -5,7 +5,7 @@ from chatclient.TheRiddlerChatSystem.Model.stateful_messaging.COM.communication_
 
 class SymmetricCryptoMessaging(CommunicationBase)
     def send(self, message: bytes) -> int:
-        pass
+        NotImplemented(f"Please finish writing the {self.__class__} send method")
 
     def recv(self, buffer: List[bytes]) -> List[bytes]:
-        pass
+        NotImplemented(f"Please finish writing the {self.__class__} recv method")

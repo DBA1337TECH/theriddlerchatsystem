@@ -3,9 +3,12 @@ from typing import List
 
 from chatclient.TheRiddlerChatSystem.Model.stateful_messaging.COM.communication_base import CommunicationBase
 
+
 class PlainTextCOMM(CommunicationBase):
     def send(self, message: bytes) -> int:
-        #TODO
+        # TODO
+        raise NotImplemented(f"Please finish writing the {self.__class__}  send method")
 
     def recv(self, buffer: List[bytes]) -> List[bytes]:
-        #TODO
+        # TODO
+        raise NotImplemented(f"Please finish writing the {self.__class__} recv method")

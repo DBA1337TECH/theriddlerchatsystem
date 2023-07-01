@@ -9,8 +9,8 @@ class CommunicationBase(ABC):
 
     @abstractmethod
     def send(self, message: bytes) -> int:
-        pass
+        raise NotImplemented("Please override the base send method")
 
     @abstractmethod
     def recv(self, buffer: List[bytes]) -> List[bytes]:
-        pass
+        raise NotImplemented("Please override the abse recv method")
