@@ -32,8 +32,10 @@ class LoadingPage(BaseView):
         self.initUI()
 
     def initUI(self):
-        self.p = QPixmap(os.getcwd() + '/images/DarkKnight_logo.png')
-        self.logo = QPixmap(os.getcwd() + '/images/1337_TECH_NEW_LOGO.png')
+        self.p = QPixmap(os.getcwd() + '/images/1337_Tech_Skull.png')
+        self.p.scaled(900, 900)
+        self.logo = QPixmap(os.getcwd() + '/images/1337_Tech_Skull.png')
+        self.logo.scaled(1000,1000)
 
         # self.setGeometry(300, 300, 250, 150)
         # self.setWindowTitle('Password Complexity UI')

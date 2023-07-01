@@ -5,6 +5,7 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 from chatclient.TheRiddlerChatSystem.Controllers.AuthAndSwitchController import AuthAndSwitchController
 from chatclient.TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
 from chatclient.TheRiddlerChatSystem.Views.LandingPage import LandingPage
+
 # from chatclient.TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 '''
@@ -34,8 +35,8 @@ class AuthenticateView(BaseView):
         self.initUI()
 
     def initUI(self):
-        self.p = QPixmap(os.getcwd() + '/images/DarkKnight_logo.png')
-        self.logo = QPixmap(os.getcwd() + '/images/1337_TECH_NEW_LOGO.png')
+        self.p = QPixmap(os.getcwd() + '/images/1337_Tech_Skull.png')
+
         hbox = QHBoxLayout(self)
 
         self.main_label = LoadingLabel(alignment=Qt.AlignCenter)
@@ -44,20 +45,21 @@ class AuthenticateView(BaseView):
 
         self.passwordBox = SecretTextBox(self.main_label, text='password')
         self.usernameBox = SecretTextBox(self.main_label, text='username')
-        self.usernameBox.move(self.main_label.size().width() + 50, 200)
-        self.usernameBox.setStyleSheet('background-color: rgb(244,40,40); border-radius: 10;')
+        self.usernameBox.move(self.main_label.size().width() // 5 - 25, self.main_label.size().height() // 5 - 50)
+        self.usernameBox.setStyleSheet('background-color: rgb(0,249,243); border-radius: 2;')
 
         self.passwordBox.setEchoMode(QLineEdit.Password)
-        self.passwordBox.setStyleSheet('background-color: rgb(244,40,40); border-radius: 10;')
-        self.passwordBox.move(self.main_label.size().width() + 50, 300)
+        self.passwordBox.setStyleSheet('background-color: rgb(0,249,243); border-radius: 2;')
+        print(self.main_label.size().width()//5)
+        self.passwordBox.move(self.main_label.size().width() // 5 - 25, self.main_label.size().height() // 5 + 100)
 
         self.usernameBox.setFont(QFont("Helvetica", 14, QFont.ExtraBold))
 
         hbox.addWidget(self.main_label)
+
 
         # self.viewswitch_controller: ViewSwitcher = ViewSwitcher(self, LandingPage)
         self.controller: AuthAndSwitchController = AuthAndSwitchController(self, LandingPage, ViewSwitcher)
 
         # self.passwordBox.clicked.connect(self.controller.auth_controller.Authenticate)
 
-        # self.show()
