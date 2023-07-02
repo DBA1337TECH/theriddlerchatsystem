@@ -5,6 +5,9 @@ from chatclient.TheRiddlerChatSystem.Model.stateful_messaging.COM.communication_
 
 
 class PlainTextCOMM(CommunicationBase):
+    def handle_cmd(self, buffer: bytes):
+        pass
+
     def send(self, message: bytes) -> int:
         # TODO
         raise NotImplemented(f"Please finish writing the {self.__class__}  send method")
