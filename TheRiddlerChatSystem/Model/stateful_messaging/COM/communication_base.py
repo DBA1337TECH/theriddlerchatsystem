@@ -58,7 +58,7 @@ class CommunicationBase(ABC):
             message = f"{self.send_queue.get(True)}"
             try:
                 self.buddy_list_obj.buddy_list_lock.acquire()
-                for screen_name, identity in self.buddy_list_obj.buddy_list.items()
+                for screen_name, identity in self.buddy_list_obj.buddy_list.items():
                     client_socket.sendto(self.parse_and_build.commands_send[b'MESG'] + self.nick.encode() + b':'
                                          + message.encode() + b'\n', identity)
             except Exception as e:
