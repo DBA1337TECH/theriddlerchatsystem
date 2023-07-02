@@ -17,8 +17,9 @@ class AuthController(BaseController.BaseController):
         self.view = view
         self.result = False
 
-    def getUserName(self):
+    def getUserName(self) -> str:
         self.username = self.view.usernameBox.text()
+        return self.username
 
     def getPassword(self):
         self.password = self.view.passwordBox.text()

@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
 from chatclient.TheRiddlerChatSystem.Controllers.AuthController import AuthController
 from chatclient.TheRiddlerChatSystem.Views import BaseView
+from chatclient.TheRiddlerChatSystem.Model import Constants
 
 
 class AuthAndSwitchController(BaseController.BaseController):
@@ -21,5 +22,7 @@ class AuthAndSwitchController(BaseController.BaseController):
             self.view_switcher.HandOffToRiddlerChatSystem()
             self.view_switcher.view.mw.setAttribute(Qt.WA_TranslucentBackground, False)
             print("Successful view switch to the Riddler Chat Application")
+            Constants.nick_name = self.auth_controller.getUserName()
+            print(f"nick_name is {Constants.nick_name}")
         else:
             print("Did not Authenticate")
