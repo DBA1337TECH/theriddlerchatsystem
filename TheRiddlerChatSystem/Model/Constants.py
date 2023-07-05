@@ -6,5 +6,3 @@ from chatclient.TheRiddlerChatSystem.Model.buddy_list.BuddyList import BuddyList
 
 USERS_FILE = '/USERS.json'
 buddy_list_obj = BuddyList()
-
-nick_name = None  # set upon successfully logging in

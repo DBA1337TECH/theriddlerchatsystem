@@ -60,7 +60,7 @@ class LandingPage(BaseView.BaseView):
         go_baby_go.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
 
         fileItems = QDockWidget("Chat Messages", self)
-        BuddyList = QDockWidget("Fellow Villians", self)
+        BuddyList = QDockWidget("Fellow Users", self)
         fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
         folderItems = QDockWidget("Type a Message to be sent", self)
         viewOne = QPixmap(os.getcwd() + '/images/Transparent_Logo_Blog_Orange_green.png')
@@ -143,6 +143,6 @@ class LandingPage(BaseView.BaseView):
         self.controllers.append(mesg_send)
         self.controllers.append(villains)
 
-        self.app = ApplicationController(self, self.controllers)
+        self.app = None
 
         self.show()

@@ -1,8 +1,8 @@
 # /usr/env/python3.7
+from queue import Queue
 
 from chatclient.TheRiddlerChatSystem.Controllers import BaseController
 from chatclient.TheRiddlerChatSystem.Model.qt_elements.RecvChatBox import RecvChatBox
-
 me = '[ReceiveController]'
 
 
@@ -17,3 +17,5 @@ class ReceiveController(BaseController.BaseController):
 
     def receive_and_print(self):
         print(me + "clicked the Receive Chat Box from ReceiveController")
+
+
