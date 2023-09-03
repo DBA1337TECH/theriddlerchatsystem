@@ -2,6 +2,14 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
+"""
+The Riddler Chat System
+
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
+"""
 from TheRiddlerChatSystem.Controllers.AuthAndSwitchController import AuthAndSwitchController
 from TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
 from TheRiddlerChatSystem.Views.LandingPage import LandingPage
@@ -13,23 +21,14 @@ Setup.  Luckily this is just a view so it is subject to change, the Developer ca
 always make a view called GameBoard (as an example) which inherits the BaseView
 '''
 
-import os
-import sys
-
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
 
-from TheRiddlerChatSystem.Controllers.AuthController import AuthController
-from TheRiddlerChatSystem.Model.CustomLabel import LoadingLabel
 from TheRiddlerChatSystem.Model.TextBoxes import SecretTextBox
 
-
-from TheRiddlerChatSystem.Views import BaseView
 from TheRiddlerChatSystem.Model.CustomLabel import *
 
 
-class AuthenticateView(BaseView.BaseView):
+class AuthenticateView(BaseView):
 
     def __init__(self, window: MainWindow = None):
         super(AuthenticateView, self).__init__()

@@ -2,8 +2,16 @@
 DBA 1337_TECH, AUSTIN TEXAS © July 2021
 Proof of Concept code, No liabilities or warranties expressed or implied.
 """
+"""
+The Riddler Chat System
 
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
+"""
 import sys
+from typing import Any
 
 sys.path.insert(0, '../Controllers')
 sys.path.insert(1, '../Model')
@@ -20,6 +28,10 @@ p = 4074071952668972172536891376818756322102936787331872501272280898708762599526
 gknot = 3
 
 me = ['ZeroAuthServer']
+
+
+def del_users_RAM(obj: Any):
+    del obj
 
 
 class ZeroAuthServer():
@@ -112,8 +124,15 @@ class ZeroAuthServer():
         usersFile = FileInterface.FileInterface(Constants.USERS_FILE)
         jsonUsers = usersFile.ReadFile()
         jsonimage = json.loads(jsonUsers)
-        Y = jsonimage[u]
-        del jsonUsers
-        del jsonimage
+        y = None
+        try:
+            y = jsonimage[u]
+            del_users_RAM(jsonUsers)
+            del_users_RAM(jsonimage)
+        except KeyError:
+            print(f"There is no user {str(u)}")
+            del_users_RAM(jsonUsers)
+            del_users_RAM(jsonimage)
+
         usersFile.CloseFile()
-        return Y
+        return y

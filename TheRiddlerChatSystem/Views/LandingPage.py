@@ -3,6 +3,14 @@ Although it is titled the Landing page it is being treated more like the initial
 GameBoard.  Luckily this is just a view so it is subject to change, I can always
 make a view called GameBoard which inherits the BaseView
 '''
+"""
+The Riddler Chat System
+
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
+"""
 
 import sys
 from PyQt5.QtCore import Qt
@@ -64,7 +72,7 @@ class LandingPage(BaseView.BaseView):
         BuddyList = QDockWidget("Fellow Villians", self)
         fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
         folderItems = QDockWidget("Type a Message to be sent", self)
-        viewOne = QPixmap(os.getcwd() + '/images/Beret_blue_mini.png')
+        viewOne = QPixmap(os.getcwd() + '/images/riddler_logo.jpg')
 
         # Adjust the Font
         options_font = QFont('Courier', 14, QFont.ExtraBold)

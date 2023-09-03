@@ -1,5 +1,12 @@
 # /usr/env/python3.7
+"""
+The Riddler Chat System
 
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
+"""
 import os
 
 from PyQt5.QtGui import QPixmap

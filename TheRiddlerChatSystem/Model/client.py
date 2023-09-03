@@ -1,9 +1,10 @@
 """
-Author: Blake D. De Garza
-UTEID: bd6225
-DATE: 01/16/2021
-DUE: 02/14/2021 at 11:59pm
-Object Oriented client, Project 1
+The Riddler Chat System
+
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
 """
 import argparse
 import re
@@ -57,7 +58,7 @@ class CommandParserAndBuilder:
 
     @staticmethod
     def join_handle_recv(screen_name) -> bool:
-        """ receives the RECV command and handles as neccesary"""
+        """ receives the RECV command and handles as necessary"""
         if screen_name:
             result = f"{color.Fore.YELLOW}{screen_name} has entered the room{color.Fore.RESET}"
             print(result)
@@ -66,7 +67,7 @@ class CommandParserAndBuilder:
 
     @staticmethod
     def mesg_handle_recv(**kwargs) -> str:
-        """ receives the MESG command and handles as neccesary"""
+        """ receives the MESG command and handles as necessary"""
         message = 'message'
         screen_name = 'screen_name'
         # now go into the builder and build the actual format string
@@ -82,12 +83,12 @@ class CommandParserAndBuilder:
 
     @staticmethod
     def acpt_handle_recv(**kwargs):
-        """ receives the ACPT command and handles as neccesary design decesion to implement in the thread"""
+        """ receives the ACPT command and handles as necessary design decision to implement in the thread"""
         pass
 
     @staticmethod
     def rejct_handle_recv(**kwargs) -> str:
-        """ recieves the REJCT command meaning the screen_name already exists"""
+        """ receives the REJCT command meaning the screen_name already exists"""
         screen_name = 'screen_name'
         return f'{color.Fore.RED}{kwargs[screen_name]} is already in use please choose another one{color.Fore.RESET}'
 

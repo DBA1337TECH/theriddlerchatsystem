@@ -1,3 +1,11 @@
+"""
+The Riddler Chat System
+
+Author: 1337_TECH DBA. Austin Texas
+DATE: 03/04/2022
+Updated: 10/09/2022
+client.py for Riddler Chat System
+"""
 from TheRiddlerChatSystem.Controllers import BaseController
 from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
 from TheRiddlerChatSystem.Model.VillainList import VillainList
