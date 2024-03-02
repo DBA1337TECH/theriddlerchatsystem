@@ -5,6 +5,7 @@ Proof of Concept code, No liabilities or warranties expressed or implied.
 """
 The Riddler Chat System
 
+
 Author: 1337_TECH DBA. Austin Texas
 DATE: 03/04/2022
 Updated: 10/09/2022
@@ -13,8 +14,9 @@ client.py for Riddler Chat System
 import sys, os
 from typing import Any
 
-from TheRiddlerChatSystem.Model import cryptoutils
-from TheRiddlerChatSystem.Model.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+from TheRiddlerChatSystem.Model.tools.crypto import cryptoutils
+from TheRiddlerChatSystem.Model.tools.crypto.zka.ZeroKnowledgeAuth import ZeroKnowledgeAuthServer, modexp, ZeroKnowledgeAuthClient
+
 
 from TheRiddlerChatSystem.Controllers import BaseController
 from TheRiddlerChatSystem.Views import BaseView
@@ -27,8 +29,9 @@ class AuthController(BaseController.BaseController):
         self.view = view
         self.result = False
 
-    def getUserName(self):
+    def getUserName(self) -> str:
         self.username = self.view.usernameBox.text()
+        return self.username
 
     def getPassword(self):
         self.password = self.view.passwordBox.text()

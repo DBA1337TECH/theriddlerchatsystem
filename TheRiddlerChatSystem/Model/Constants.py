@@ -10,4 +10,8 @@ DATE: 03/04/2022
 Updated: 10/09/2022
 client.py for Riddler Chat System
 """
-USERS_FILE =  '/USERS.json'
+USERS_FILE =  '/Model/USERS.json'
+from TheRiddlerChatSystem.Model.buddy_list.BuddyList import BuddyList
+
+USERS_FILE = '/Model/USERS.json'
+buddy_list_obj = BuddyList()

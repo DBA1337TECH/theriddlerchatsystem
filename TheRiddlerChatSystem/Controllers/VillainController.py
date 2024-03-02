@@ -1,3 +1,4 @@
+
 """
 The Riddler Chat System
 
@@ -7,8 +8,8 @@ Updated: 10/09/2022
 client.py for Riddler Chat System
 """
 from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
-from TheRiddlerChatSystem.Model.VillainList import VillainList
+from TheRiddlerChatSystem.Model.qt_elements.VillainList import VillainList
+
 
 me = '[VillainController]'
 

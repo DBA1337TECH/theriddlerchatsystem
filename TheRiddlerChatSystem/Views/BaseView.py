@@ -6,7 +6,7 @@ DATE: 03/04/2022
 Updated: 10/09/2022
 client.py for Riddler Chat System
 """
-from PyQt5.QtWidgets import QWidget
+from PySide6.QtWidgets import QWidget
 
 me = '[BaseView]'
 

@@ -10,9 +10,10 @@ client.py for Riddler Chat System
 import os
 import sys
 
-from PyQt5.QtCore import Qt, QPoint
-from PyQt5.QtGui import QIcon, QPainter, QPen
-from PyQt5.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect, QDesktopWidget
+from PySide6 import QtGui
+from PySide6.QtCore import Qt, QPoint
+from PySide6.QtGui import QIcon, QPainter, QPen
+from PySide6.QtWidgets import QApplication, QMainWindow, QStyle, QGraphicsOpacityEffect
 
 from TheRiddlerChatSystem.Views import LoadingPage
 
@@ -61,7 +62,7 @@ class MainWindow(QMainWindow):
 
     def center(self):
         qr = self.frameGeometry()
-        cp = QDesktopWidget().availableGeometry().center()
+        cp = QtGui.QGuiApplication.primaryScreen().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
@@ -93,7 +94,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle('The Riddler Chat System')
 
-        self.setWindowIcon(QIcon(os.getcwd() + '/images/1337_Logo_small.png'))
+        self.setWindowIcon(QIcon(os.getcwd() + '/Views/images/1337_Logo_small.png'))
 
         self.setAttribute(Qt.WA_TranslucentBackground, True)
         self.setWindowFlags(Qt.FramelessWindowHint)

@@ -12,20 +12,19 @@ Updated: 10/09/2022
 client.py for Riddler Chat System
 """
 
-import sys
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 # from StenographyController import StenographyController
-from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton, QTextEdit, QListWidget
+from PySide6.QtGui import QFont
+from PySide6.QtWidgets import QFrame, QSplitter, QLabel, QHBoxLayout, QDockWidget, QPushButton
 
 from TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
 from TheRiddlerChatSystem.Controllers.MessageController import MessageController
 from TheRiddlerChatSystem.Controllers.VillainController import VillainController
-from TheRiddlerChatSystem.Model.CustomLabel import *
+from TheRiddlerChatSystem.Model.qt_elements.CustomLabel import *
 from TheRiddlerChatSystem.Controllers.ReceiveController import ReceiveController
-from TheRiddlerChatSystem.Model.MsgChatBox import MsgChatBox
-from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
-from TheRiddlerChatSystem.Model.VillainList import VillainList
+from TheRiddlerChatSystem.Model.qt_elements.MsgChatBox import MsgChatBox
+from TheRiddlerChatSystem.Model.qt_elements.RecvChatBox import RecvChatBox
+from TheRiddlerChatSystem.Model.qt_elements.VillainList import VillainList
 from TheRiddlerChatSystem.Views import BaseView
 
 sys.path.insert(0, '../Controllers')
@@ -69,10 +68,11 @@ class LandingPage(BaseView.BaseView):
         go_baby_go.setStyleSheet(background_role + green + '; ' + text_role + purple + ';')
 
         fileItems = QDockWidget("Chat Messages", self)
-        BuddyList = QDockWidget("Fellow Villians", self)
+        BuddyList = QDockWidget("Fellow Users", self)
         fileItems.setFeatures(QDockWidget.NoDockWidgetFeatures)
         folderItems = QDockWidget("Type a Message to be sent", self)
-        viewOne = QPixmap(os.getcwd() + '/images/riddler_logo.jpg')
+        viewOne = QPixmap(os.getcwd() + '/Views/images/Transparent_Logo_Blog_Orange_green.png')
+        viewOne = viewOne.scaled(150, 150)
 
         # Adjust the Font
         options_font = QFont('Courier', 14, QFont.ExtraBold)
@@ -103,6 +103,7 @@ class LandingPage(BaseView.BaseView):
 
         logo = QLabel()
         logo.setPixmap(self.p2)
+        logo.resize(50, 50)
 
         top_left = QFrame(splitter1)
         top_left.setFrameShape(QFrame.StyledPanel)
@@ -150,6 +151,6 @@ class LandingPage(BaseView.BaseView):
         self.controllers.append(mesg_send)
         self.controllers.append(villains)
 
-        self.app = ApplicationController(self, self.controllers)
+        self.app = None
 
         self.show()

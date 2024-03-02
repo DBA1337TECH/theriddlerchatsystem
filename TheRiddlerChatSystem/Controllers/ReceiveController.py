@@ -1,4 +1,5 @@
 # /usr/env/python3.7
+
 """
 The Riddler Chat System
 
@@ -7,12 +8,10 @@ DATE: 03/04/2022
 Updated: 10/09/2022
 client.py for Riddler Chat System
 """
-import os
 
-from PyQt5.QtWidgets import QTextEdit
+from TheRiddlerChatSystem.Model.qt_elements.RecvChatBox import RecvChatBox
 
 from TheRiddlerChatSystem.Controllers import BaseController
-from TheRiddlerChatSystem.Model.RecvChatBox import RecvChatBox
 
 me = '[ReceiveController]'
 
@@ -28,3 +27,5 @@ class ReceiveController(BaseController.BaseController):
 
     def receive_and_print(self):
         print(me + "clicked the Receive Chat Box from ReceiveController")
+
+

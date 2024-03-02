@@ -7,11 +7,16 @@ Updated: 10/09/2022
 client.py for Riddler Chat System
 """
 
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 
 from TheRiddlerChatSystem.Controllers import BaseController
+from TheRiddlerChatSystem.Controllers.ApplicationController import ApplicationController
 from TheRiddlerChatSystem.Controllers.AuthController import AuthController
 from TheRiddlerChatSystem.Views import BaseView
+import TheRiddlerChatSystem.Model as DynamicConstants
+from TheRiddlerChatSystem.Model.stateful_messaging.mailbox import PostOfficeBox
+
+from queue import Queue
 
 
 class AuthAndSwitchController(BaseController.BaseController):
@@ -28,7 +33,12 @@ class AuthAndSwitchController(BaseController.BaseController):
     def open_application_on_auth(self):
         if self.auth_controller.Authenticate():
             self.view_switcher.HandOffToRiddlerChatSystem()
+            if self.view_switcher.view.app is None:
+                self.view_switcher.view.app = ApplicationController(self,
+                                                                    self.view_switcher.view.controllers,
+                                                                    nick_name=self.auth_controller.username)
             self.view_switcher.view.mw.setAttribute(Qt.WA_TranslucentBackground, False)
             print("Successful view switch to the Riddler Chat Application")
+
         else:
             print("Did not Authenticate")

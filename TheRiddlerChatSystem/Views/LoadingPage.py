@@ -10,7 +10,7 @@ DATE: 03/04/2022
 Updated: 10/09/2022
 client.py for Riddler Chat System
 """
-from TheRiddlerChatSystem.Views.AuthenticationView import AuthenticateView
+from .AuthenticationView import AuthenticateView
 
 '''
 Although it is titled the Landing page it is being treated more like the initial
@@ -18,18 +18,18 @@ Setup.  Luckily this is just a view so it is subject to change, the Developer ca
 always make a view called GameBoard (as an example) which inherits the BaseView
 '''
 
-from PyQt5.QtCore import Qt
+from PySide6.QtCore import Qt
 
 from TheRiddlerChatSystem.Controllers.ViewSwitcher import ViewSwitcher
-from TheRiddlerChatSystem.Model.CustomLabel import *
-from TheRiddlerChatSystem.Model.Overlay import Overlay
+from TheRiddlerChatSystem.Model.qt_elements.CustomLabel import *
+from TheRiddlerChatSystem.Model.qt_elements.Overlay import Overlay
 from TheRiddlerChatSystem.Views.BaseView import BaseView
-from TheRiddlerChatSystem.Views.MainWindow import MainWindow
+# from TheRiddlerChatSystem.Views.MainWindow import MainWindow
 
 
 class LoadingPage(BaseView):
 
-    def __init__(self, window: MainWindow = None):
+    def __init__(self, window= None):
         super(LoadingPage, self).__init__()
         self.ctrl = None
         self.components = []
@@ -40,8 +40,10 @@ class LoadingPage(BaseView):
         self.initUI()
 
     def initUI(self):
-        self.p = QPixmap(os.getcwd() + '/images/DarkKnight_logo.png')
-        self.logo = QPixmap(os.getcwd() + '/images/1337_TECH_NEW_LOGO.png')
+        self.p = QPixmap(os.getcwd() + '/Views/images/1337_Tech_Skull.png')
+        self.p.scaled(900, 900)
+        self.logo = QPixmap(os.getcwd() + '/Views/images/1337_Tech_Skull.png')
+        self.logo.scaled(1000,1000)
 
         # self.setGeometry(300, 300, 250, 150)
         # self.setWindowTitle('Password Complexity UI')
@@ -98,7 +100,7 @@ class LoadingPage(BaseView):
         self.setGeometry(300, 300, 250, 405)
         #
         pallete = QPalette()
-        pallete.setColor(QPalette.Background, Qt.gray)
+        pallete.setColor(QPalette.Window, Qt.gray)
         #  #pallete.setColor(QPalette.Background, Qt.green)
         self.setAutoFillBackground(True)
         self.setPalette(pallete)
